@@ -153,12 +153,12 @@ namespace MPS
 
         public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
         {
-            //PrimitiveLine brush = new PrimitiveLine(Color.Red, graphicsDevice);
+            PrimitiveLine brush = new PrimitiveLine(Color.Red, graphicsDevice);
             foreach (NetwerkObject obj in objecten)
             {
                 spriteBatch.Draw(obj.Texture, obj.Positie, null, Color.White, 0, obj.Midden, 1, SpriteEffects.None, 0);
-                //brush.CreateLine(obj.Positie, obj.Positie * 2);
-                //brush.Render(spriteBatch);
+                brush.CreateLine(obj.Positie, obj.Positie * 2);
+                brush.Render(spriteBatch);
             }
         }
     }
