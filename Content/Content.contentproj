@@ -40,8 +40,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Sprites\hub.png">
-      <Name>hub</Name>
+    <Compile Include="Sprites\switch.png">
+      <Name>switch</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -88,8 +88,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sprites\hub_sel.png">
-      <Name>hub_sel</Name>
+    <Compile Include="Sprites\switch_sel.png">
+      <Name>switch_sel</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

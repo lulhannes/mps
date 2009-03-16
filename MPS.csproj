@@ -93,10 +93,13 @@
       <DependentUpon>formMain.cs</DependentUpon>
     </Compile>
     <Compile Include="NetwerkObject.cs" />
+    <Compile Include="Netwerk.cs" />
     <Compile Include="PrimitiveLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="SpriteManager.cs" />
+    <Compile Include="Textures.cs" />
     <Compile Include="XNA2dCamera.cs" />
   </ItemGroup>
   <ItemGroup>

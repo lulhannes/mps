@@ -20,7 +20,6 @@ namespace MPS
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private formMain form;
-        private Sprites sprites;
         private MouseState mouseStateCurrent, mouseStatePrevious;
         private KeyboardState keyStateCurrent, keyStatePrevious;
         private XNA2dCamera camera;
@@ -85,14 +84,13 @@ namespace MPS
         /// </summary>
         protected override void LoadContent()
         {
-            Textures.Init(Content);
+            Textures.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            sprites = new Sprites();
-            sprites.Add(ObjectType.Router, new Vector2(440, 0));
-            sprites.Add(ObjectType.Mainframe, new Vector2(960, 0));
-            sprites.Add(ObjectType.Hub, new Vector2(440, 350));
-            sprites.Add(ObjectType.Pc, new Vector2(-100, 500));
-            sprites.Add(ObjectType.Laptop, new Vector2(960, 500));
+            SpriteManager.Add(ObjectType.Router, new Vector2(440, 0));
+            SpriteManager.Add(ObjectType.Mainframe, new Vector2(960, 0));
+            SpriteManager.Add(ObjectType.Switch, new Vector2(440, 350));
+            SpriteManager.Add(ObjectType.Pc, new Vector2(-100, 500));
+            SpriteManager.Add(ObjectType.Laptop, new Vector2(960, 500));
         }
 
         /// <summary>
@@ -128,12 +126,24 @@ namespace MPS
         {
             #region Muis
             mouseStateCurrent = Mouse.GetState();
+
             // selecteren
             if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Released)
             {
-                sprites.Click(new Vector2(mouseStateCurrent.X - 121, mouseStateCurrent.Y + 20) - schermPositieVerschil,
+                SpriteManager.Click(new Vector2(mouseStateCurrent.X - 121, mouseStateCurrent.Y + 20) - schermPositieVerschil,
                     schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X);
             }
+
+            // object slepen
+            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Pressed)
+            {
+                if (SpriteManager.Geselecteerde >= 0)
+                {
+                    SpriteManager.Objecten[SpriteManager.Geselecteerde].Positie -= (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y) - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y))
+                        / camera.Zoom.X;
+                }
+            }
+
             // camera slepen
             if (mouseStateCurrent.RightButton == ButtonState.Pressed && mouseStatePrevious.RightButton == ButtonState.Pressed)
             {
@@ -170,7 +180,7 @@ namespace MPS
             graphics.GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState, camera.ViewTransformationMatrix());
-            sprites.Draw(spriteBatch, graphics.GraphicsDevice);
+            SpriteManager.Draw(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X);
             spriteBatch.End();
 
             base.Draw(gameTime);
