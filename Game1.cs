@@ -23,9 +23,9 @@ namespace MPS
         private MouseState mouseStateCurrent, mouseStatePrevious;
         private KeyboardState keyStateCurrent, keyStatePrevious;
         private XNA2dCamera camera;
-        private float zoomStep, panStep; // snelheid
-        private Vector2 oorsprong; // begin positie camera
-        private Vector2 schermPositieBegin, schermPositieVerschil, schermMiddenBegin, schermMidden; // positie scherm (nodig voor coordinaten)
+        private float zoomStep, panStep; // Snelheid van camera
+        private Vector2 oorsprong; // Beginpositie van camera
+        private Vector2 schermPositieBegin, schermPositieVerschil, schermMiddenBegin, schermMidden; // Positie scherm (nodig voor coordinaten)
 
         public Game1(formMain form)
         {
@@ -84,13 +84,20 @@ namespace MPS
         /// </summary>
         protected override void LoadContent()
         {
+
             Textures.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            SpriteManager.Add(ObjectType.Router, new Vector2(440, 0));
-            SpriteManager.Add(ObjectType.Mainframe, new Vector2(960, 0));
-            SpriteManager.Add(ObjectType.Switch, new Vector2(440, 350));
-            SpriteManager.Add(ObjectType.Pc, new Vector2(-100, 500));
-            SpriteManager.Add(ObjectType.Laptop, new Vector2(960, 500));
+
+            Netwerk.AddApparatuur(ObjectType.Router, new Vector2(440, 0));
+            Netwerk.AddApparatuur(ObjectType.Mainframe, new Vector2(960, 0));
+            Netwerk.AddApparatuur(ObjectType.Switch, new Vector2(440, 350));
+            Netwerk.AddApparatuur(ObjectType.Pc, new Vector2(-100, 500));
+            Netwerk.AddApparatuur(ObjectType.Laptop, new Vector2(960, 500));
+
+            Netwerk.Verbind(Netwerk.Apparatuur[0], Netwerk.Apparatuur[1]);
+            Netwerk.Verbind(Netwerk.Apparatuur[0], Netwerk.Apparatuur[2]);
+            Netwerk.Verbind(Netwerk.Apparatuur[2], Netwerk.Apparatuur[3]);
+            Netwerk.Verbind(Netwerk.Apparatuur[2], Netwerk.Apparatuur[4]);
         }
 
         /// <summary>
@@ -109,7 +116,7 @@ namespace MPS
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            System.Threading.Thread.Sleep(1); // CPU van 50% naar 3% D:
+            System.Threading.Thread.Sleep(3); // CPU van 50% naar 3% D:
             UpdateInput();
             if (camera.Zoom.X > 1)
             { camera.Zoom = new Vector2(1); }
@@ -127,24 +134,24 @@ namespace MPS
             #region Muis
             mouseStateCurrent = Mouse.GetState();
 
-            // selecteren
+            // Selecteren
             if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Released)
             {
                 SpriteManager.Click(new Vector2(mouseStateCurrent.X - 121, mouseStateCurrent.Y + 20) - schermPositieVerschil,
                     schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X);
             }
 
-            // object slepen
+            // Object slepen
             if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Pressed)
             {
                 if (SpriteManager.Geselecteerde >= 0)
                 {
-                    SpriteManager.Objecten[SpriteManager.Geselecteerde].Positie -= (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y) - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y))
-                        / camera.Zoom.X;
+                    Netwerk.Apparatuur[SpriteManager.Geselecteerde].Positie -= (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y)
+                        - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y)) / camera.Zoom.X;
                 }
             }
 
-            // camera slepen
+            // Camera slepen
             if (mouseStateCurrent.RightButton == ButtonState.Pressed && mouseStatePrevious.RightButton == ButtonState.Pressed)
             {
                 camera.Position += (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y) - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y))
@@ -180,7 +187,7 @@ namespace MPS
             graphics.GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState, camera.ViewTransformationMatrix());
-            SpriteManager.Draw(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X);
+            SpriteManager.Draw(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X, form.label1);
             spriteBatch.End();
 
             base.Draw(gameTime);

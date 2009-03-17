@@ -35,7 +35,7 @@ namespace MPS
         /// <param name="graphicsDevice">The Graphics Device object to use.</param>
         public PrimitiveBrush(Color lineColor, GraphicsDevice graphicsDevice, float zoom)
         {
-            // create pixels
+            // Create pixels
             pixel = new Texture2D(graphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
             Color[] pixels = { Color.White };
             pixel.SetData<Color>(pixels);
@@ -63,7 +63,7 @@ namespace MPS
                     radius * (float)Math.Sin((double)theta)));
             }
 
-            // then add the first vector again so it's a complete loop
+            // Then add the first vector again so it's a complete loop
             vectors.Add(new Vector2(radius * (float)Math.Cos(0),
                     radius * (float)Math.Sin(0)));
 
@@ -108,14 +108,13 @@ namespace MPS
                 Vector2 vector1 = (Vector2)vectors[i - 1];
                 Vector2 vector2 = (Vector2)vectors[i];
 
-                // calculate the distance between the two vectors
+                // Calculate the distance between the two vectors
                 float distance = Vector2.Distance(vector1, vector2);
 
-                // calculate the angle between the two vectors
-                float angle = (float)Math.Atan2((double)(vector2.Y - vector1.Y),
-                    (double)(vector2.X - vector1.X));
+                // Calculate the angle between the two vectors
+                float angle = (float)Math.Atan2((double)(vector2.Y - vector1.Y), (double)(vector2.X - vector1.X));
 
-                // stretch the pixel between the two vectors
+                // Stretch the pixel between the two vectors
                 spriteBatch.Draw(pixel,
                     Position + vector1,
                     null,

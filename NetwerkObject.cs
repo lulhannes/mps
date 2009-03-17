@@ -14,7 +14,7 @@ namespace MPS
         Switch
     };
 
-    public class NetwerkObject
+    public class Apparaat
     {
         public ObjectType Soort { get; set; }
         public Texture2D TextureNormaal { get; set; }
@@ -24,7 +24,7 @@ namespace MPS
         public Vector2 Positie { get; set; }
         public Vector2 Midden { get; set; }
 
-        public NetwerkObject(ObjectType type, Vector2 positie)
+        public Apparaat(ObjectType type, Vector2 positie)
         {
             Soort = type;
             TextureNormaal = Textures.GetNormaal(Soort);
