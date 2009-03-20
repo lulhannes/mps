@@ -92,7 +92,8 @@
     <Compile Include="formMain.Designer.cs">
       <DependentUpon>formMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="NetwerkObject.cs" />
+    <Compile Include="Apparaten.cs" />
+    <Compile Include="Malware.cs" />
     <Compile Include="Netwerk.cs" />
     <Compile Include="PrimitiveLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

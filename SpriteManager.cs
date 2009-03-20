@@ -69,20 +69,28 @@ namespace MPS
             PrimitiveBrush brush = new PrimitiveBrush(Color.Gray, graphicsDevice, zoom);
             for (int i = Netwerk.Apparatuur.Count - 1; i >= 0; i--)
             {
-                Apparaat obj = Netwerk.Apparatuur[i];
-                spriteBatch.Draw(obj.Texture, obj.Positie, null, Color.White, 0, obj.Midden, 1, SpriteEffects.None, 0);
+                Apparaat app = Netwerk.Apparatuur[i];
+                // Sprite
+                spriteBatch.Draw(app.Texture, app.Positie, null, Color.White, 0, app.Midden, 1, SpriteEffects.None, 0);
+
+                // Infectie-logo
+                if (app.Infecties.Count > 0 && app.GetType() == typeof(Computer)) // Als app een geinfecteerde computer is
+                    spriteBatch.Draw(Textures.Geinfecteerd, app.Positie + new Vector2(-124, 64), Color.White); // Teken het teken in de hoek
+
+                // Vierkant
                 if (i == Geselecteerde)
                     brush.LineColor = Color.Blue;
-                brush.DrawSquare(obj.Positie, 128, spriteBatch);
+                brush.DrawSquare(app.Positie, 128, spriteBatch);
             }
 
             // Teken verbindingen
             brush = new PrimitiveBrush(Color.Black, graphicsDevice, zoom / 2);
             foreach (Apparaat[] bnd in Netwerk.Verbindingen)
             {
-                // Oh lawd, is dat sum geometry? D:
+                // Bereken hoek tussen de 2 apparaten
                 double hoek = Math.Atan2((double)(bnd[1].Positie.Y - bnd[0].Positie.Y), (double)(bnd[1].Positie.X - bnd[0].Positie.X));
 
+                // Bereken daarmee de gewenste offset van de lijn
                 float xOffset = 128;
                 float yOffset = xOffset * (float)Math.Tan(hoek);
                 bool x = true;

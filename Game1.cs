@@ -88,16 +88,19 @@ namespace MPS
             Textures.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Netwerk.AddApparatuur(ObjectType.Router, new Vector2(440, 0));
-            Netwerk.AddApparatuur(ObjectType.Mainframe, new Vector2(960, 0));
-            Netwerk.AddApparatuur(ObjectType.Switch, new Vector2(440, 350));
-            Netwerk.AddApparatuur(ObjectType.Pc, new Vector2(-100, 500));
-            Netwerk.AddApparatuur(ObjectType.Laptop, new Vector2(960, 500));
+            Netwerk.AddNetwerkApparaat(ApparaatType.Router, new Vector2(440, 0));
+            Netwerk.AddComputer(ApparaatType.Mainframe, new Vector2(960, 0));
+            Netwerk.AddNetwerkApparaat(ApparaatType.Switch, new Vector2(440, 350));
+            Netwerk.AddComputer(ApparaatType.Pc, new Vector2(-100, 500));
+            Netwerk.AddComputer(ApparaatType.Laptop, new Vector2(960, 500));
 
             Netwerk.Verbind(Netwerk.Apparatuur[0], Netwerk.Apparatuur[1]);
             Netwerk.Verbind(Netwerk.Apparatuur[0], Netwerk.Apparatuur[2]);
             Netwerk.Verbind(Netwerk.Apparatuur[2], Netwerk.Apparatuur[3]);
             Netwerk.Verbind(Netwerk.Apparatuur[2], Netwerk.Apparatuur[4]);
+
+            Netwerk.AddMalware(0, 0);
+            Netwerk.Malware[0].Infecteer(Netwerk.Apparatuur[3]);
         }
 
         /// <summary>

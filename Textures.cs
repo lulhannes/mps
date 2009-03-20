@@ -12,20 +12,18 @@ namespace MPS
     {
         public static Texture2D LaptopNormaal;
         public static Texture2D LaptopGeselecteerd;
-        //public static Texture2D LaptopGeinfecteerd;
         public static Texture2D MainframeNormaal;
         public static Texture2D MainframeGeselecteerd;
-        //public static Texture2D MainframeGeinfecteerd;
         public static Texture2D PcNormaal;
         public static Texture2D PcGeselecteerd;
-        //public static Texture2D PcGeinfecteerd;
         public static Texture2D RouterNormaal;
         public static Texture2D RouterGeselecteerd;
         public static Texture2D SwitchNormaal;
         public static Texture2D SwitchGeselecteerd;
+        public static Texture2D Geinfecteerd;
 
         /// <summary>
-        /// Laadt alle textures.
+        /// Laad alle textures.
         /// </summary>
         public static void Load(ContentManager content)
         {
@@ -39,24 +37,25 @@ namespace MPS
             RouterGeselecteerd = content.Load<Texture2D>("Sprites\\router_sel");
             SwitchNormaal = content.Load<Texture2D>("Sprites\\switch");
             SwitchGeselecteerd = content.Load<Texture2D>("Sprites\\switch_sel");
+            Geinfecteerd = content.Load<Texture2D>("Sprites\\inf");
         }
 
         /// <summary>
         /// Returnt de normale texture van een object.
         /// </summary>
-        public static Texture2D GetNormaal(ObjectType type)
+        public static Texture2D GetNormaal(ApparaatType type)
         {
             switch (type)
             {
-                case ObjectType.Laptop:
+                case ApparaatType.Laptop:
                     return LaptopNormaal;
-                case ObjectType.Mainframe:
+                case ApparaatType.Mainframe:
                     return MainframeNormaal;
-                case ObjectType.Pc:
+                case ApparaatType.Pc:
                     return PcNormaal;
-                case ObjectType.Router:
+                case ApparaatType.Router:
                     return RouterNormaal;
-                case ObjectType.Switch:
+                case ApparaatType.Switch:
                     return SwitchNormaal;
             }
             return null;
@@ -65,19 +64,19 @@ namespace MPS
         /// <summary>
         /// Returnt de geselecteerde texture van een object.
         /// </summary>
-        public static Texture2D GetGeselecteerd(ObjectType type)
+        public static Texture2D GetGeselecteerd(ApparaatType type)
         {
             switch (type)
             {
-                case ObjectType.Laptop:
+                case ApparaatType.Laptop:
                     return LaptopGeselecteerd;
-                case ObjectType.Mainframe:
+                case ApparaatType.Mainframe:
                     return MainframeGeselecteerd;
-                case ObjectType.Pc:
+                case ApparaatType.Pc:
                     return PcGeselecteerd;
-                case ObjectType.Router:
+                case ApparaatType.Router:
                     return RouterGeselecteerd;
-                case ObjectType.Switch:
+                case ApparaatType.Switch:
                     return SwitchGeselecteerd;
             }
             return null;

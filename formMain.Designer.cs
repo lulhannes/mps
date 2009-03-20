@@ -28,18 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("192.168.1.100");
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("192.168.1.101");
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("192.168.1.1", new System.Windows.Forms.TreeNode[] {
-            treeNode9,
-            treeNode10});
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Domein", new System.Windows.Forms.TreeNode[] {
-            treeNode11});
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("192.168.1.100");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("192.168.1.101");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("192.168.1.1", new System.Windows.Forms.TreeNode[] {
+            treeNode5,
+            treeNode6});
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Domein", new System.Windows.Forms.TreeNode[] {
+            treeNode7});
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeNetwerken = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -74,16 +76,16 @@
             this.treeNetwerken.LabelEdit = true;
             this.treeNetwerken.Location = new System.Drawing.Point(0, 0);
             this.treeNetwerken.Name = "treeNetwerken";
-            treeNode9.Name = "Node1";
-            treeNode9.Text = "192.168.1.100";
-            treeNode10.Name = "Node2";
-            treeNode10.Text = "192.168.1.101";
-            treeNode11.Name = "Node3";
-            treeNode11.Text = "192.168.1.1";
-            treeNode12.Name = "Node0";
-            treeNode12.Text = "Domein";
+            treeNode5.Name = "Node1";
+            treeNode5.Text = "192.168.1.100";
+            treeNode6.Name = "Node2";
+            treeNode6.Text = "192.168.1.101";
+            treeNode7.Name = "Node3";
+            treeNode7.Text = "192.168.1.1";
+            treeNode8.Name = "Node0";
+            treeNode8.Text = "Domein";
             this.treeNetwerken.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode12});
+            treeNode8});
             this.treeNetwerken.Size = new System.Drawing.Size(137, 556);
             this.treeNetwerken.TabIndex = 0;
             // 
@@ -121,6 +123,12 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Computer details:\n\nNetwerk:\n\nIP:\n\nType\n\nFirewall:\n\nVirusscanner:\n\nInfecties:";
             // 
+            // timer
+            // 
+            this.timer.Enabled = true;
+            this.timer.Interval = 1000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,6 +155,7 @@
         public System.Windows.Forms.TreeView treeNetwerken;
         public System.Windows.Forms.Label label1;
         public System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Timer timer;
 
     }
 }
