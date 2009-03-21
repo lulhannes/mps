@@ -84,23 +84,10 @@ namespace MPS
         /// </summary>
         protected override void LoadContent()
         {
-
             Textures.Load(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            Netwerk.AddNetwerkApparaat(ApparaatType.Router, new Vector2(440, 0));
-            Netwerk.AddComputer(ApparaatType.Mainframe, new Vector2(960, 0));
-            Netwerk.AddNetwerkApparaat(ApparaatType.Switch, new Vector2(440, 350));
-            Netwerk.AddComputer(ApparaatType.Pc, new Vector2(-100, 500));
-            Netwerk.AddComputer(ApparaatType.Laptop, new Vector2(960, 500));
-
-            Netwerk.Verbind(Netwerk.Apparatuur[0], Netwerk.Apparatuur[1]);
-            Netwerk.Verbind(Netwerk.Apparatuur[0], Netwerk.Apparatuur[2]);
-            Netwerk.Verbind(Netwerk.Apparatuur[2], Netwerk.Apparatuur[3]);
-            Netwerk.Verbind(Netwerk.Apparatuur[2], Netwerk.Apparatuur[4]);
-
-            Netwerk.AddMalware(0, 0);
-            Netwerk.Malware[0].Infecteer(Netwerk.Apparatuur[3]);
+            Netwerk.Test();
         }
 
         /// <summary>
@@ -120,15 +107,24 @@ namespace MPS
         protected override void Update(GameTime gameTime)
         {
             System.Threading.Thread.Sleep(3); // CPU van 50% naar 3% D:
+
             UpdateInput();
+
+            // Maximale en minimale zoom
             if (camera.Zoom.X > 1)
-            { camera.Zoom = new Vector2(1); }
+                camera.Zoom = new Vector2(1);
             else if (camera.Zoom.X < 0.2F)
-            { camera.Zoom = new Vector2(0.2F); }
+                camera.Zoom = new Vector2(0.2F);
+
             schermPositieVerschil = new Vector2(form.Left, form.Top) - schermPositieBegin;
-            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nschermMidden: {2}\nschermPositie: {3}\nschermPositieBegin: {4}\nMuis.Position: {5}",
-                camera.Zoom.X, camera.Position, schermMidden, new Vector2(form.Left, form.Top), schermPositieBegin,
-                new Vector2(mouseStateCurrent.X - 121, mouseStateCurrent.Y + 20) - schermPositieVerschil - schermMidden);
+            
+            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nschermMidden: {2}\nschermPositie: {3}\nMuis.Position: {4}\nInfecties.Count: {5}",
+                camera.Zoom.X, camera.Position, schermMidden, new Vector2(form.Left, form.Top),
+                new Vector2(mouseStateCurrent.X - 121, mouseStateCurrent.Y + 20) - schermPositieVerschil - schermMidden,
+                SpriteManager.Geselecteerde >= 0 ? Netwerk.Apparatuur[SpriteManager.Geselecteerde].Infecties.Count : 0);
+
+            MalwareAnimatie.Update(gameTime.ElapsedGameTime.TotalMilliseconds);
+            
             base.Update(gameTime);
         }
 
@@ -165,9 +161,11 @@ namespace MPS
 
             #region Toetsenbord
             keyStateCurrent = Keyboard.GetState();
+
             // Zoom
             if (keyStateCurrent.IsKeyDown(Keys.OemPlus)) { camera.Zoom += new Vector2(zoomStep); }
             if (keyStateCurrent.IsKeyDown(Keys.OemMinus)) { camera.Zoom -= new Vector2(zoomStep); }
+
             // Pan
             float pan = panStep / camera.Zoom.X;
             if (keyStateCurrent.IsKeyDown(Keys.LeftShift)) { pan *= 3; }
@@ -175,10 +173,17 @@ namespace MPS
             if (keyStateCurrent.IsKeyDown(Keys.S)) { camera.Position += new Vector2(0, pan); }
             if (keyStateCurrent.IsKeyDown(Keys.A)) { camera.Position -= new Vector2(pan, 0); }
             if (keyStateCurrent.IsKeyDown(Keys.D)) { camera.Position += new Vector2(pan, 0); }
+
             // Andere
-            if (keyStateCurrent.IsKeyDown(Keys.D0)) { camera.Position = oorsprong; camera.Rotation = 0; }
+            if (keyStateCurrent.IsKeyDown(Keys.D0))
+            {
+                camera.Position = oorsprong;
+                camera.Rotation = 0;
+                Netwerk.Test();
+            }
+
             keyStatePrevious = keyStateCurrent;
-            #endregion Camera
+            #endregion Toetsenbord
         }
 
         /// <summary>
@@ -190,7 +195,7 @@ namespace MPS
             graphics.GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState, camera.ViewTransformationMatrix());
-            SpriteManager.Draw(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X, form.label1);
+            SpriteManager.Draw(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X);
             spriteBatch.End();
 
             base.Draw(gameTime);

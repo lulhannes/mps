@@ -21,6 +21,7 @@ namespace MPS
         public static Texture2D SwitchNormaal;
         public static Texture2D SwitchGeselecteerd;
         public static Texture2D Geinfecteerd;
+        public static Texture2D Malware;
 
         /// <summary>
         /// Laad alle textures.
@@ -37,7 +38,8 @@ namespace MPS
             RouterGeselecteerd = content.Load<Texture2D>("Sprites\\router_sel");
             SwitchNormaal = content.Load<Texture2D>("Sprites\\switch");
             SwitchGeselecteerd = content.Load<Texture2D>("Sprites\\switch_sel");
-            Geinfecteerd = content.Load<Texture2D>("Sprites\\inf");
+            Geinfecteerd = content.Load<Texture2D>("Sprites\\geinfecteerd");
+            Malware = content.Load<Texture2D>("Sprites\\malware");
         }
 
         /// <summary>

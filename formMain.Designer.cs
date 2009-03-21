@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("192.168.1.100");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("192.168.1.101");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("192.168.1.1", new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6});
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Domein", new System.Windows.Forms.TreeNode[] {
-            treeNode7});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("192.168.1.100");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("192.168.1.101");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("192.168.1.1", new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2});
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Domein", new System.Windows.Forms.TreeNode[] {
+            treeNode3});
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeNetwerken = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -65,7 +65,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1024, 556);
+            this.splitContainer1.Size = new System.Drawing.Size(1184, 762);
             this.splitContainer1.SplitterDistance = 137;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -76,17 +76,17 @@
             this.treeNetwerken.LabelEdit = true;
             this.treeNetwerken.Location = new System.Drawing.Point(0, 0);
             this.treeNetwerken.Name = "treeNetwerken";
-            treeNode5.Name = "Node1";
-            treeNode5.Text = "192.168.1.100";
-            treeNode6.Name = "Node2";
-            treeNode6.Text = "192.168.1.101";
-            treeNode7.Name = "Node3";
-            treeNode7.Text = "192.168.1.1";
-            treeNode8.Name = "Node0";
-            treeNode8.Text = "Domein";
+            treeNode1.Name = "Node1";
+            treeNode1.Text = "192.168.1.100";
+            treeNode2.Name = "Node2";
+            treeNode2.Text = "192.168.1.101";
+            treeNode3.Name = "Node3";
+            treeNode3.Text = "192.168.1.1";
+            treeNode4.Name = "Node0";
+            treeNode4.Text = "Domein";
             this.treeNetwerken.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode8});
-            this.treeNetwerken.Size = new System.Drawing.Size(137, 556);
+            treeNode4});
+            this.treeNetwerken.Size = new System.Drawing.Size(137, 762);
             this.treeNetwerken.TabIndex = 0;
             // 
             // splitContainer2
@@ -100,8 +100,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.panel1);
-            this.splitContainer2.Size = new System.Drawing.Size(883, 556);
-            this.splitContainer2.SplitterDistance = 475;
+            this.splitContainer2.Size = new System.Drawing.Size(1043, 762);
+            this.splitContainer2.SplitterDistance = 650;
             this.splitContainer2.TabIndex = 0;
             // 
             // panel1
@@ -111,7 +111,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(883, 77);
+            this.panel1.Size = new System.Drawing.Size(1043, 108);
             this.panel1.TabIndex = 1;
             // 
             // label1
@@ -126,14 +126,14 @@
             // timer
             // 
             this.timer.Enabled = true;
-            this.timer.Interval = 1000;
+            this.timer.Interval = 2000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1024, 556);
+            this.ClientSize = new System.Drawing.Size(1184, 762);
             this.Controls.Add(this.splitContainer1);
             this.Name = "formMain";
             this.Text = "formMain";

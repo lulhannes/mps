@@ -13,10 +13,12 @@ namespace MPS
     public static class SpriteManager
     {
         public static int Geselecteerde { get; private set; }
+        public static List<MalwareAnimatie> Animaties { get; set; }
 
         static SpriteManager()
         {
             Geselecteerde = -1;
+            Animaties = new List<MalwareAnimatie>();
         }
 
         /// <summary>
@@ -63,7 +65,7 @@ namespace MPS
             obj.Texture = obj.TextureGeselecteerd;
         }
 
-        public static void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, float zoom, System.Windows.Forms.Label lbl)
+        public static void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, float zoom)
         {
             // Teken sprites en vierkanten (van achter naar voren zodat de geselecteerde boven staat)
             PrimitiveBrush brush = new PrimitiveBrush(Color.Gray, graphicsDevice, zoom);
@@ -125,6 +127,38 @@ namespace MPS
                 {
                     brush.DrawLine(bnd[0].Positie + new Vector2(xOffset1, yOffset1), bnd[1].Positie + new Vector2(xOffset2, yOffset2), spriteBatch);
                 }
+            }
+
+            // Teken verspreidende Malware
+            foreach (MalwareAnimatie anim in Animaties)
+            {
+                // Bereken hoek tussen de 2 apparaten, en bepaal daarmee of de texture moet worden gespiegeld
+                float hoek = (float)Math.Atan2((float)(anim.eind.Positie.Y - anim.start.Positie.Y), (float)(anim.eind.Positie.X - anim.start.Positie.X));
+                SpriteEffects effect = (hoek > Math.PI / 2 || hoek < Math.PI / -2) ? SpriteEffects.FlipVertically : SpriteEffects.None;
+                Vector2 pos = anim.start.Positie + (anim.eind.Positie - anim.start.Positie) * new Vector2((float)anim.procent);
+                spriteBatch.Draw(Textures.Malware, pos, null, Color.White, hoek, new Vector2(32), 1, effect, 0);
+            }
+        }
+    }
+
+    public class MalwareAnimatie
+    {
+        public Apparaat start;
+        public Apparaat eind;
+        public double procent;
+
+        public MalwareAnimatie(Apparaat start, Apparaat eind)
+        {
+            this.start = start;
+            this.eind = eind;
+            procent = 0;
+        }
+
+        public static void Update(Double time)
+        {
+            foreach (MalwareAnimatie anim in SpriteManager.Animaties.ToArray())
+            {
+                anim.procent += time / 2000;
             }
         }
     }

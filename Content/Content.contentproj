@@ -95,8 +95,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sprites\inf.png">
-      <Name>inf</Name>
+    <Compile Include="Sprites\geinfecteerd.png">
+      <Name>geinfecteerd</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sprites\malware.png">
+      <Name>malware</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

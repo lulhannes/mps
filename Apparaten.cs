@@ -23,7 +23,8 @@ namespace MPS
         public Texture2D Texture { get; set; }
         public Vector2 Positie { get; set; }
         public Vector2 Midden { get; private set; }
-
+        public int Firewall { get; set; }
+        public int Antivirus { get; set; }
         public List<Malware> Infecties { get; set; }
 
         public Apparaat(ApparaatType type, Vector2 positie)
@@ -34,17 +35,19 @@ namespace MPS
             Texture = TextureNormaal;
             Positie = positie;
             Midden = new Vector2(Texture.Width / 2, Texture.Height / 2);
-
+            Firewall = 0;
+            Antivirus = 0;
             Infecties = new List<Malware>();
         }
     }
 
     public class Computer : Apparaat
     {
-        public Computer(ApparaatType type, Vector2 positie)
+        public Computer(ApparaatType type, int firewall, Vector2 positie)
             : base(type, positie)
         {
-            //TODO
+            Firewall = firewall;
+            //Antivirus = antivirus;
         }
     }
 
@@ -53,7 +56,6 @@ namespace MPS
         public NetwerkApparaat(ApparaatType type, Vector2 positie)
             : base(type, positie)
         {
-            //TODO
         }
     }
 }
