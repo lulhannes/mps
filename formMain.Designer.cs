@@ -29,13 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("192.168.1.100");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("192.168.1.101");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("192.168.1.1", new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Domein", new System.Windows.Forms.TreeNode[] {
-            treeNode3});
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeNetwerken = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -76,16 +69,6 @@
             this.treeNetwerken.LabelEdit = true;
             this.treeNetwerken.Location = new System.Drawing.Point(0, 0);
             this.treeNetwerken.Name = "treeNetwerken";
-            treeNode1.Name = "Node1";
-            treeNode1.Text = "192.168.1.100";
-            treeNode2.Name = "Node2";
-            treeNode2.Text = "192.168.1.101";
-            treeNode3.Name = "Node3";
-            treeNode3.Text = "192.168.1.1";
-            treeNode4.Name = "Node0";
-            treeNode4.Text = "Domein";
-            this.treeNetwerken.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode4});
             this.treeNetwerken.Size = new System.Drawing.Size(137, 762);
             this.treeNetwerken.TabIndex = 0;
             // 

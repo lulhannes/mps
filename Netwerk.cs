@@ -73,10 +73,15 @@ namespace MPS
             }
 
             // Desinfecteer netwerkapparatuur
-            foreach (NetwerkApparaat app in (from app in Apparatuur where app.GetType() == typeof(NetwerkApparaat) select app))
-            {
-                //app.Infecties.Clear();
-            }
+            //foreach (NetwerkApparaat app in (from app in Apparatuur where app is NetwerkApparaat select app))
+            //{
+            //    app.Infecties.Clear();
+            //}
+
+            // Voeg random computers toe
+            //Random rand = new Random();
+            //AddComputer(ApparaatType.Pc, 0, new Vector2(rand.Next(-2000, 3000), rand.Next(-2000, 2700)));
+            //Verbind(Apparatuur[Apparatuur.Count - 1], Apparatuur[rand.Next(Apparatuur.Count - 1)]);
         }
 
         /// <summary>
@@ -93,21 +98,25 @@ namespace MPS
 
             SpriteManager.Animaties = new List<MalwareAnimatie>();
 
+            AddNetwerkApparaat(ApparaatType.Modem, new Vector2(-100, -100));
             AddNetwerkApparaat(ApparaatType.Router, new Vector2(430, 0));
-            AddComputer(ApparaatType.Mainframe, 0, new Vector2(960, 0));
+            AddComputer(ApparaatType.Server, 0, new Vector2(960, 0));
             AddNetwerkApparaat(ApparaatType.Switch, new Vector2(430, 350));
             AddComputer(ApparaatType.Pc, 0, new Vector2(-100, 500));
-            AddComputer(ApparaatType.Laptop, 0, new Vector2(630, 800));
+            AddComputer(ApparaatType.Laptop, 0, new Vector2(160, 800));
+            AddComputer(ApparaatType.Pc, 0, new Vector2(700, 800));
             AddComputer(ApparaatType.Laptop, 0, new Vector2(960, 500));
             
             Verbind(Apparatuur[0], Apparatuur[1]);
-            Verbind(Apparatuur[0], Apparatuur[2]);
-            Verbind(Apparatuur[2], Apparatuur[3]);
-            Verbind(Apparatuur[2], Apparatuur[4]);
-            Verbind(Apparatuur[2], Apparatuur[5]);
+            Verbind(Apparatuur[1], Apparatuur[2]);
+            Verbind(Apparatuur[1], Apparatuur[3]);
+            Verbind(Apparatuur[3], Apparatuur[4]);
+            Verbind(Apparatuur[3], Apparatuur[5]);
+            Verbind(Apparatuur[3], Apparatuur[6]);
+            Verbind(Apparatuur[3], Apparatuur[7]);
 
             AddMalware(0, 0);
-            Malware[0].Infecteer(Apparatuur[3]);
+            Malware[0].Infecteer(Apparatuur[5]);
         }
     }
 }

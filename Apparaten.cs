@@ -8,9 +8,10 @@ namespace MPS
     public enum ApparaatType
     {
         Laptop,
-        Mainframe,
+        Modem,
         Pc,
         Router,
+        Server,
         Switch
     };
 
