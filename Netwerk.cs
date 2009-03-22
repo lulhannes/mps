@@ -103,7 +103,7 @@ namespace MPS
             AddComputer(ApparaatType.Server, 0, new Vector2(960, 0));
             AddNetwerkApparaat(ApparaatType.Switch, new Vector2(430, 350));
             AddComputer(ApparaatType.Pc, 0, new Vector2(-100, 500));
-            AddComputer(ApparaatType.Laptop, 0, new Vector2(160, 800));
+            AddComputer((ApparaatType)Enum.Parse(typeof(ApparaatType), "Laptop"), 0, new Vector2(160, 800));
             AddComputer(ApparaatType.Pc, 0, new Vector2(700, 800));
             AddComputer(ApparaatType.Laptop, 0, new Vector2(960, 500));
             

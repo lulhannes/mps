@@ -12,25 +12,25 @@ namespace MPS
     /// </summary>
     public static class SpriteManager
     {
-        public static int Geselecteerde { get; private set; }
+        public static Apparaat Geselecteerde { get; private set; }
         public static List<MalwareAnimatie> Animaties { get; set; }
 
         static SpriteManager()
         {
-            Geselecteerde = -1;
+            Geselecteerde = null;
             Animaties = new List<MalwareAnimatie>();
         }
 
         /// <summary>
-        /// Zoekt een object op deze positie en selecteert deze.
+        /// Zoekt een object onder de muis en selecteert deze.
         /// Returnt de index van dit object in Netwerk.Apparatuur, of -1.
         /// </summary>
-        public static int Click(Vector2 positie, Vector2 midden, Vector2 middenBegin, Vector2 offset, float zoom)
+        public static void Click(Vector2 muis, Vector2 midden, Vector2 middenBegin, Vector2 offset, float zoom)
         {
-            int selectie = -1;
-            positie -= midden;
+            muis -= midden;
 
             // Deselecteer alles
+            Geselecteerde = null;
             foreach (Apparaat app in Netwerk.Apparatuur)
             {
                 app.Texture = app.TextureNormaal;
@@ -41,28 +41,25 @@ namespace MPS
             {
                 Apparaat app = Netwerk.Apparatuur[i];
                 Vector2 coord = (app.Positie - middenBegin - offset) * zoom;
-                if (System.Math.Abs(coord.X - positie.X) < app.Texture.Width / 2 * zoom
-                    && System.Math.Abs(coord.Y - positie.Y) < app.Texture.Height / 2 * zoom)
+                if (System.Math.Abs(coord.X - muis.X) < app.Texture.Width / 2 * zoom
+                    && System.Math.Abs(coord.Y - muis.Y) < app.Texture.Height / 2 * zoom)
                 {
                     Selecteer(app);
                     Apparaat swap = Netwerk.Apparatuur[0];
                     Netwerk.Apparatuur[0] = Netwerk.Apparatuur[i];
                     Netwerk.Apparatuur[i] = swap;
-
-                    selectie = 0;
                     break;
                 }
             }
-            Geselecteerde = selectie;
-            return selectie;
         }
 
         /// <summary>
         /// Selecteert het gegeven object.
         /// </summary>
-        public static void Selecteer(Apparaat obj)
+        public static void Selecteer(Apparaat app)
         {
-            obj.Texture = obj.TextureGeselecteerd;
+            app.Texture = app.TextureGeselecteerd;
+            Geselecteerde = app;
         }
 
         public static void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, float zoom)
@@ -80,7 +77,7 @@ namespace MPS
                     spriteBatch.Draw(Textures.Geinfecteerd, app.Positie + new Vector2(-124, 64), Color.White); // Teken het teken in de hoek
 
                 // Vierkant
-                if (i == Geselecteerde)
+                if (app == Geselecteerde)
                     brush.LineColor = Color.Blue;
                 brush.DrawSquare(app.Positie, 128, spriteBatch);
             }

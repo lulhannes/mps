@@ -25,7 +25,7 @@ namespace MPS
         private XNA2dCamera camera;
         private float zoomStep, panStep; // Snelheid van camera
         private Vector2 oorsprong; // Beginpositie van camera
-        private Vector2 schermPositieBegin, schermPositieVerschil, schermMiddenBegin, schermMidden; // Positie scherm (nodig voor coordinaten)
+        private Vector2 schermMiddenBegin, schermMidden; // Midden van scherm (nodig voor coordinaten)
 
         public Game1(formMain form)
         {
@@ -71,10 +71,12 @@ namespace MPS
             zoomStep = 0.01F;
             panStep = 5;
             oorsprong = camera.Position;
-            schermPositieBegin = new Vector2(form.Left, form.Top);
             schermMiddenBegin = new Vector2(form.Panel.Width / 2, form.Panel.Height / 2);
             schermMidden = schermMiddenBegin;
             camera.Zoom = new Vector2(0.5F);
+            Mouse.WindowHandle = IntPtr.Zero;
+            Mouse.WindowHandle = form.Panel.Handle;
+
             base.Initialize();
         }
 
@@ -115,13 +117,11 @@ namespace MPS
                 camera.Zoom = new Vector2(1);
             else if (camera.Zoom.X < 0.2F)
                 camera.Zoom = new Vector2(0.2F);
-
-            schermPositieVerschil = new Vector2(form.Left, form.Top) - schermPositieBegin;
             
             form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nschermMidden: {2}\nschermPositie: {3}\nMuis.Position: {4}\nInfecties.Count: {5}",
                 camera.Zoom.X, camera.Position, schermMidden, new Vector2(form.Left, form.Top),
-                new Vector2(mouseStateCurrent.X - 121, mouseStateCurrent.Y + 20) - schermPositieVerschil - schermMidden,
-                SpriteManager.Geselecteerde >= 0 ? Netwerk.Apparatuur[SpriteManager.Geselecteerde].Infecties.Count : 0);
+                new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y) - schermMidden,
+                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0);
 
             MalwareAnimatie.Update(gameTime.ElapsedGameTime.TotalMilliseconds);
             
@@ -136,16 +136,16 @@ namespace MPS
             // Selecteren
             if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Released)
             {
-                SpriteManager.Click(new Vector2(mouseStateCurrent.X - 121, mouseStateCurrent.Y + 20) - schermPositieVerschil,
+                SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y),
                     schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X);
             }
 
             // Object slepen
             if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Pressed)
             {
-                if (SpriteManager.Geselecteerde >= 0)
+                if (SpriteManager.Geselecteerde != null)
                 {
-                    Netwerk.Apparatuur[SpriteManager.Geselecteerde].Positie -= (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y)
+                    SpriteManager.Geselecteerde.Positie -= (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y)
                         - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y)) / camera.Zoom.X;
                 }
             }
