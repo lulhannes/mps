@@ -67,13 +67,15 @@ namespace MPS
         /// </summary>
         protected override void Initialize()
         {
+
             camera = new XNA2dCamera(graphics);
+            camera.Zoom = new Vector2(0.5F);
             zoomStep = 0.01F;
             panStep = 5;
             oorsprong = camera.Position;
             schermMiddenBegin = new Vector2(form.Panel.Width / 2, form.Panel.Height / 2);
             schermMidden = schermMiddenBegin;
-            camera.Zoom = new Vector2(0.5F);
+
             Mouse.WindowHandle = IntPtr.Zero;
             Mouse.WindowHandle = form.Panel.Handle;
 
@@ -108,40 +110,34 @@ namespace MPS
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            System.Threading.Thread.Sleep(3); // CPU van 50% naar 3% D:
+            System.Threading.Thread.Sleep(5); // Geef je CPU wat rust =]
 
-            UpdateInput();
-
-            // Maximale en minimale zoom
-            if (camera.Zoom.X > 1)
-                camera.Zoom = new Vector2(1);
-            else if (camera.Zoom.X < 0.2F)
-                camera.Zoom = new Vector2(0.2F);
-            
             form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nschermMidden: {2}\nschermPositie: {3}\nMuis.Position: {4}\nInfecties.Count: {5}",
                 camera.Zoom.X, camera.Position, schermMidden, new Vector2(form.Left, form.Top),
                 new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y) - schermMidden,
                 SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0);
 
-            MalwareAnimatie.Update(gameTime.ElapsedGameTime.TotalMilliseconds);
-            
+            UpdateInput();
+            Netwerk.Update(gameTime);
+
             base.Update(gameTime);
         }
 
         private void UpdateInput()
         {
-            #region Muis
             mouseStateCurrent = Mouse.GetState();
+            keyStateCurrent = Keyboard.GetState();
 
             // Selecteren
-            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Released)
+            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Released
+                && !keyStateCurrent.IsKeyDown(Keys.Space))
             {
-                SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y),
-                    schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X);
+                SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X, true);
             }
 
             // Object slepen
-            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Pressed)
+            if (mouseStateCurrent.LeftButton == ButtonState.Pressed
+                && !keyStateCurrent.IsKeyDown(Keys.Space))
             {
                 if (SpriteManager.Geselecteerde != null)
                 {
@@ -151,30 +147,36 @@ namespace MPS
             }
 
             // Camera slepen
-            if (mouseStateCurrent.RightButton == ButtonState.Pressed && mouseStatePrevious.RightButton == ButtonState.Pressed)
+            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && keyStateCurrent.IsKeyDown(Keys.Space))
             {
                 camera.Position += (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y) - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y))
                     / camera.Zoom.X;
             }
-            mouseStatePrevious = mouseStateCurrent;
-            #endregion Muis
-
-            #region Toetsenbord
-            keyStateCurrent = Keyboard.GetState();
 
             // Zoom
-            if (keyStateCurrent.IsKeyDown(Keys.OemPlus)) { camera.Zoom += new Vector2(zoomStep); }
-            if (keyStateCurrent.IsKeyDown(Keys.OemMinus)) { camera.Zoom -= new Vector2(zoomStep); }
+            if (keyStateCurrent.IsKeyDown(Keys.OemPlus))
+                camera.Zoom += new Vector2(zoomStep);
+            if (keyStateCurrent.IsKeyDown(Keys.OemMinus))
+                camera.Zoom -= new Vector2(zoomStep);
 
             // Pan
             float pan = panStep / camera.Zoom.X;
-            if (keyStateCurrent.IsKeyDown(Keys.LeftShift)) { pan *= 3; }
-            if (keyStateCurrent.IsKeyDown(Keys.W)) { camera.Position -= new Vector2(0, pan); }
-            if (keyStateCurrent.IsKeyDown(Keys.S)) { camera.Position += new Vector2(0, pan); }
-            if (keyStateCurrent.IsKeyDown(Keys.A)) { camera.Position -= new Vector2(pan, 0); }
-            if (keyStateCurrent.IsKeyDown(Keys.D)) { camera.Position += new Vector2(pan, 0); }
+            if (keyStateCurrent.IsKeyDown(Keys.LeftShift))
+                pan *= 3;
+            if (keyStateCurrent.IsKeyDown(Keys.W))
+                camera.Position -= new Vector2(0, pan);
+            if (keyStateCurrent.IsKeyDown(Keys.S))
+                camera.Position += new Vector2(0, pan);
+            if (keyStateCurrent.IsKeyDown(Keys.A))
+                camera.Position -= new Vector2(pan, 0);
+            if (keyStateCurrent.IsKeyDown(Keys.D))
+                camera.Position += new Vector2(pan, 0);
 
-            // Andere
+            // Snelheid
+            if (keyStateCurrent.IsKeyDown(Keys.OemOpenBrackets))
+                Netwerk.Timer -= 100;
+
+            // Reset
             if (keyStateCurrent.IsKeyDown(Keys.D0))
             {
                 camera.Position = oorsprong;
@@ -182,8 +184,24 @@ namespace MPS
                 Netwerk.Test();
             }
 
+            // Verander muis
+            if (keyStateCurrent.IsKeyDown(Keys.Space) &&
+                mouseStateCurrent.X >= 0 && mouseStateCurrent.X <= schermMidden.X * 2 &&
+                mouseStateCurrent.Y >= 0 && mouseStateCurrent.Y <= schermMidden.Y * 2)
+            {
+                form.Cursor = System.Windows.Forms.Cursors.NoMove2D;
+            }
+            else if (SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X, false))
+            {
+                form.Cursor = System.Windows.Forms.Cursors.Hand;
+            }
+            else
+            {
+                form.Cursor = System.Windows.Forms.Cursors.Default;
+            }
+
+            mouseStatePrevious = mouseStateCurrent;
             keyStatePrevious = keyStateCurrent;
-            #endregion Toetsenbord
         }
 
         /// <summary>
@@ -195,7 +213,7 @@ namespace MPS
             graphics.GraphicsDevice.Clear(Color.White);
 
             spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState, camera.ViewTransformationMatrix());
-            SpriteManager.Draw(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X);
+            SpriteManager.DrawAll(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X);
             spriteBatch.End();
 
             base.Draw(gameTime);

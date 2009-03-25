@@ -11,24 +11,23 @@ namespace MPS
     {
         public static List<Apparaat> Apparatuur { get; private set; }
         public static List<Apparaat[]> Verbindingen { get; private set; }
-        public static List<Malware> Malware { get; private set; }
+        public static List<Malware> Malwares { get; private set; }
+        public static int Timer { get; set; }
 
-        private static List<Apparaat[]> teInfecterenApp;
-        private static List<Malware> teInfecterenMal;
+        private static double timePrev;
 
         static Netwerk()
         {
             Apparatuur = new List<Apparaat>();
             Verbindingen = new List<Apparaat[]>();
-            Malware = new List<Malware>();
-
-            teInfecterenApp = new List<Apparaat[]>();
-            teInfecterenMal = new List<Malware>();
+            Malwares = new List<Malware>();
+            Timer = 3000;
+            timePrev = 0;
         }
 
-        public static void AddComputer(ApparaatType type, int firewall, Vector2 positie)
+        public static void AddComputer(ApparaatType type, int firewall, int antivirus, Vector2 positie)
         {
-            Apparatuur.Add(new Computer(type, firewall, positie));
+            Apparatuur.Add(new Computer(type, firewall, antivirus, positie));
         }
 
         public static void AddNetwerkApparaat(ApparaatType type, Vector2 positie)
@@ -48,40 +47,23 @@ namespace MPS
 
         public static void AddMalware(int firewall, int antivirus)
         {
-            Malware.Add(new Malware(firewall, antivirus));
+            Malwares.Add(new Malware(firewall, antivirus));
         }
 
-        public static void Update()
+        public static void Update(GameTime gameTime)
         {
-            // Infecteer alle te infecteren apparaten
-            for (int i = 0; i < teInfecterenMal.Count; i++)
+            if (gameTime.TotalGameTime.TotalMilliseconds - timePrev > Timer || timePrev == 0)
             {
-                teInfecterenMal[i].Infecteer(teInfecterenApp[i][0]);
+                // Voeg nieuwe animaties toe
+                foreach (Apparaat a in Netwerk.Apparatuur)
+                    foreach (Malware mal in (from mal in a.Infecties where a.Firewall <= mal.Firewall select mal))
+                        foreach (Apparaat b in mal.GetOngeinfecteerden())
+                            SpriteManager.Animaties.Add(new MalwareAnimatie(a.RouteNaar(b), mal));
+
+                timePrev = gameTime.TotalGameTime.TotalMilliseconds + 0.001;
             }
 
-            // Zoek nieuwe te infecteren apparaten
-            SpriteManager.Animaties.Clear();
-            foreach (Malware mal in Malware)
-            {
-                int vorige = teInfecterenApp.Count;
-                teInfecterenApp.AddRange(mal.GetAlleBuren());
-                for (int i = vorige; i < teInfecterenApp.Count; i++)
-                {
-                    teInfecterenMal.Add(mal);
-                    SpriteManager.Animaties.Add(new MalwareAnimatie(teInfecterenApp[i][1], teInfecterenApp[i][0]));
-                }
-            }
-
-            // Desinfecteer netwerkapparatuur
-            //foreach (NetwerkApparaat app in (from app in Apparatuur where app is NetwerkApparaat select app))
-            //{
-            //    app.Infecties.Clear();
-            //}
-
-            // Voeg random computers toe
-            //Random rand = new Random();
-            //AddComputer(ApparaatType.Pc, 0, new Vector2(rand.Next(-2000, 3000), rand.Next(-2000, 2700)));
-            //Verbind(Apparatuur[Apparatuur.Count - 1], Apparatuur[rand.Next(Apparatuur.Count - 1)]);
+            Malware.Update(gameTime);
         }
 
         /// <summary>
@@ -89,34 +71,30 @@ namespace MPS
         /// </summary>
         public static void Test()
         {
-            Apparatuur = new List<Apparaat>();
-            Verbindingen = new List<Apparaat[]>();
-            Malware = new List<Malware>();
-
-            teInfecterenApp = new List<Apparaat[]>();
-            teInfecterenMal = new List<Malware>();
-
-            SpriteManager.Animaties = new List<MalwareAnimatie>();
+            Apparatuur.Clear();
+            Verbindingen.Clear();
+            Malwares.Clear();
+            SpriteManager.Animaties.Clear();
 
             AddNetwerkApparaat(ApparaatType.Modem, new Vector2(-100, -100));
             AddNetwerkApparaat(ApparaatType.Router, new Vector2(430, 0));
-            AddComputer(ApparaatType.Server, 0, new Vector2(960, 0));
+            AddComputer(ApparaatType.Server, 0, 0, new Vector2(960, 0));
             AddNetwerkApparaat(ApparaatType.Switch, new Vector2(430, 350));
-            AddComputer(ApparaatType.Pc, 0, new Vector2(-100, 500));
-            AddComputer((ApparaatType)Enum.Parse(typeof(ApparaatType), "Laptop"), 0, new Vector2(160, 800));
-            AddComputer(ApparaatType.Pc, 0, new Vector2(700, 800));
-            AddComputer(ApparaatType.Laptop, 0, new Vector2(960, 500));
+            AddComputer(ApparaatType.Pc, 0, 0, new Vector2(-100, 500));
+            AddComputer(ApparaatType.Laptop, 0, 0, new Vector2(160, 800));
+            AddComputer(ApparaatType.Pc, 0, 1, new Vector2(700, 800));
+            AddComputer(ApparaatType.Laptop, 1, 0, new Vector2(960, 500));
             
-            Verbind(Apparatuur[0], Apparatuur[1]);
-            Verbind(Apparatuur[1], Apparatuur[2]);
-            Verbind(Apparatuur[1], Apparatuur[3]);
-            Verbind(Apparatuur[3], Apparatuur[4]);
-            Verbind(Apparatuur[3], Apparatuur[5]);
-            Verbind(Apparatuur[3], Apparatuur[6]);
-            Verbind(Apparatuur[3], Apparatuur[7]);
+            Apparatuur[0].Children.Add(Apparatuur[1]);
+            Apparatuur[1].Children.Add(Apparatuur[2]);
+            Apparatuur[1].Children.Add(Apparatuur[3]);
+            Apparatuur[3].Children.Add(Apparatuur[4]);
+            Apparatuur[3].Children.Add(Apparatuur[5]);
+            Apparatuur[3].Children.Add(Apparatuur[6]);
+            Apparatuur[3].Children.Add(Apparatuur[7]);
 
             AddMalware(0, 0);
-            Malware[0].Infecteer(Apparatuur[5]);
+            Malwares[0].Infecteer(Apparatuur[5]);
         }
     }
 }

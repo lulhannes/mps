@@ -15,7 +15,7 @@ namespace MPS
         Switch
     };
 
-    public abstract class Apparaat
+    public abstract class Apparaat : TreeNode<Apparaat>
     {
         public ApparaatType Type { get; private set; }
         public Texture2D TextureNormaal { get; private set; }
@@ -44,11 +44,11 @@ namespace MPS
 
     public class Computer : Apparaat
     {
-        public Computer(ApparaatType type, int firewall, Vector2 positie)
+        public Computer(ApparaatType type, int firewall, int antivirus, Vector2 positie)
             : base(type, positie)
         {
             Firewall = firewall;
-            //Antivirus = antivirus;
+            Antivirus = antivirus;
         }
     }
 

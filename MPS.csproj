@@ -86,6 +86,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TreeNode.cs" />
+    <Compile Include="TreeNodeList.cs" />
     <Compile Include="formMain.cs">
       <SubType>Form</SubType>
     </Compile>

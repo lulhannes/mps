@@ -25,10 +25,5 @@ namespace MPS
         {
             Application.Exit();
         }
-
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            Netwerk.Update();
-        }
     }
 }

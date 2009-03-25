@@ -68,8 +68,13 @@ public class XNA2dCamera : GraphicsDeviceManager
     public Vector2 Zoom
     {
         get { return zoom; }
-        set { zoom = value; }
+        set
+        {
+            // Maximale en minimale zoom
+            if (value.X >= 0.2 && value.X <= 1)
+                zoom = value;
         }
+    }
     #endregion Transformations
 
     public Vector2 ScreenPosition

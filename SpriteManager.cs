@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,18 +26,15 @@ namespace MPS
         /// Zoekt een object onder de muis en selecteert deze.
         /// Returnt de index van dit object in Netwerk.Apparatuur, of -1.
         /// </summary>
-        public static void Click(Vector2 muis, Vector2 midden, Vector2 middenBegin, Vector2 offset, float zoom)
+        public static bool Click(Vector2 muis, Vector2 midden, Vector2 middenBegin, Vector2 offset, float zoom, bool selecteer)
         {
             muis -= midden;
 
             // Deselecteer alles
-            Geselecteerde = null;
-            foreach (Apparaat app in Netwerk.Apparatuur)
-            {
-                app.Texture = app.TextureNormaal;
-            }
+            if (selecteer)
+                Deselecteer();
 
-            // Zoek geklikt object
+            // Zoek en selecteer geklikt object
             for (int i = 0; i < Netwerk.Apparatuur.Count; i++)
             {
                 Apparaat app = Netwerk.Apparatuur[i];
@@ -44,17 +42,21 @@ namespace MPS
                 if (System.Math.Abs(coord.X - muis.X) < app.Texture.Width / 2 * zoom
                     && System.Math.Abs(coord.Y - muis.Y) < app.Texture.Height / 2 * zoom)
                 {
-                    Selecteer(app);
-                    Apparaat swap = Netwerk.Apparatuur[0];
-                    Netwerk.Apparatuur[0] = Netwerk.Apparatuur[i];
-                    Netwerk.Apparatuur[i] = swap;
-                    break;
+                    if (selecteer)
+                    {
+                        Selecteer(app);
+                        Apparaat swap = Netwerk.Apparatuur[0];
+                        Netwerk.Apparatuur[0] = Netwerk.Apparatuur[i];
+                        Netwerk.Apparatuur[i] = swap;
+                    }
+                    return true;
                 }
             }
+            return false;
         }
 
         /// <summary>
-        /// Selecteert het gegeven object.
+        /// Selecteert het gegeven apparaat.
         /// </summary>
         public static void Selecteer(Apparaat app)
         {
@@ -62,7 +64,26 @@ namespace MPS
             Geselecteerde = app;
         }
 
-        public static void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, float zoom)
+        /// <summary>
+        /// Deselecteert alle apparaten.
+        /// </summary>
+        public static void Deselecteer()
+        {
+            Geselecteerde = null;
+            foreach (Apparaat app in Netwerk.Apparatuur)
+            {
+                app.Texture = app.TextureNormaal;
+            }
+        }
+
+        public static void DrawAll(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, float zoom)
+        {
+            DrawApparaten(spriteBatch, graphicsDevice, zoom);
+            DrawVerbindingen(spriteBatch, graphicsDevice, zoom);
+            DrawMalware(spriteBatch);
+        }
+
+        private static void DrawApparaten(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, float zoom)
         {
             // Teken sprites en vierkanten (van achter naar voren zodat de geselecteerde boven staat)
             PrimitiveBrush brush = new PrimitiveBrush(Color.Gray, graphicsDevice, zoom);
@@ -81,13 +102,18 @@ namespace MPS
                     brush.LineColor = Color.Blue;
                 brush.DrawSquare(app.Positie, 128, spriteBatch);
             }
+        }
 
+        private static void DrawVerbindingen(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, float zoom)
+        {
             // Teken verbindingen
-            brush = new PrimitiveBrush(Color.Black, graphicsDevice, zoom / 2);
-            foreach (Apparaat[] bnd in Netwerk.Verbindingen)
+            PrimitiveBrush brush = new PrimitiveBrush(Color.Black, graphicsDevice, zoom / 2);
+            foreach (Apparaat a1 in (from app in Netwerk.Apparatuur where app.Parent != null select app))
             {
+                Apparaat a2 = a1.Parent;
+
                 // Bereken hoek tussen de 2 apparaten
-                double hoek = Math.Atan2((double)(bnd[1].Positie.Y - bnd[0].Positie.Y), (double)(bnd[1].Positie.X - bnd[0].Positie.X));
+                double hoek = Math.Atan2((double)(a2.Positie.Y - a1.Positie.Y), (double)(a2.Positie.X - a1.Positie.X));
 
                 // Bereken daarmee de gewenste offset van de lijn
                 float xOffset = 128;
@@ -104,7 +130,7 @@ namespace MPS
 
                 int xRichting = 1;
                 int yRichting = -1;
-                if ((x && bnd[0].Positie.X > bnd[1].Positie.X) || (!x && bnd[0].Positie.Y > bnd[1].Positie.Y))
+                if ((x && a1.Positie.X > a2.Positie.X) || (!x && a1.Positie.Y > a2.Positie.Y))
                 {
                     xRichting = -1;
                     yRichting = 1;
@@ -115,48 +141,68 @@ namespace MPS
                 float xOffset2 = xOffset * -xRichting;
                 float yOffset2 = yOffset * yRichting;
 
-                if (System.Math.Abs(bnd[0].Positie.X - bnd[1].Positie.X) < bnd[0].Texture.Width &&
-                    System.Math.Abs(bnd[0].Positie.Y - bnd[1].Positie.Y) < bnd[0].Texture.Width)
+                if (System.Math.Abs(a1.Positie.X - a2.Positie.X) < a1.Texture.Width &&
+                    System.Math.Abs(a1.Positie.Y - a2.Positie.Y) < a1.Texture.Width)
                 {
-                    brush.DrawLine(bnd[0].Positie, bnd[1].Positie, spriteBatch);
+                    brush.DrawLine(a1.Positie, a2.Positie, spriteBatch);
                 }
                 else
                 {
-                    brush.DrawLine(bnd[0].Positie + new Vector2(xOffset1, yOffset1), bnd[1].Positie + new Vector2(xOffset2, yOffset2), spriteBatch);
+                    brush.DrawLine(a1.Positie + new Vector2(xOffset1, yOffset1), a2.Positie + new Vector2(xOffset2, yOffset2), spriteBatch);
                 }
             }
+        }
 
+        private static void DrawMalware(SpriteBatch spriteBatch)
+        {
             // Teken verspreidende Malware
-            foreach (MalwareAnimatie anim in Animaties)
+            foreach (MalwareAnimatie mal in Animaties)
             {
                 // Bereken hoek tussen de 2 apparaten, en bepaal daarmee of de texture moet worden gespiegeld
-                float hoek = (float)Math.Atan2((float)(anim.eind.Positie.Y - anim.start.Positie.Y), (float)(anim.eind.Positie.X - anim.start.Positie.X));
-                SpriteEffects effect = (hoek > Math.PI / 2 || hoek < Math.PI / -2) ? SpriteEffects.FlipVertically : SpriteEffects.None;
-                Vector2 pos = anim.start.Positie + (anim.eind.Positie - anim.start.Positie) * new Vector2((float)anim.procent);
-                spriteBatch.Draw(Textures.Malware, pos, null, Color.White, hoek, new Vector2(32), 1, effect, 0);
+                spriteBatch.Draw(Textures.Malware, mal.Positie, null, Color.White, mal.Hoek, new Vector2(32), 1, mal.Effect, 0);
             }
         }
     }
 
     public class MalwareAnimatie
     {
-        public Apparaat start;
-        public Apparaat eind;
-        public double procent;
+        public Apparaat Start { get; private set; }
+        public Apparaat Eind { get; private set; }
+        public float Hoek { get; private set; }
+        public SpriteEffects Effect { get; private set; }
+        public Vector2 Positie { get; private set; }
+        public bool Klaar { get; private set; }
+        public Malware Malware { get; private set; }
 
-        public MalwareAnimatie(Apparaat start, Apparaat eind)
+        private List<Apparaat> route;
+        private int aantal;
+        private double procent;
+
+        public MalwareAnimatie(List<Apparaat> route, Malware malware)
         {
-            this.start = start;
-            this.eind = eind;
+            Positie = route[0].Positie;
+            Klaar = false;
+            Malware = malware;
+            this.route = route;
+            aantal = route.Count - 1;
             procent = 0;
         }
 
-        public static void Update(Double time)
+        public void Update(Double time)
         {
-            foreach (MalwareAnimatie anim in SpriteManager.Animaties.ToArray())
+            procent += time / Netwerk.Timer;
+            if (procent >= 1)
             {
-                anim.procent += time / 2000;
+                Klaar = true;
+                return;
             }
+
+            int i = (int)(aantal * procent);
+            Start = route[i];
+            Eind = route[i + 1];
+            Hoek = (float)Math.Atan2((float)(Eind.Positie.Y - Start.Positie.Y), (float)(Eind.Positie.X - Start.Positie.X));
+            Effect = (Hoek > Math.PI / 2 || Hoek < Math.PI / -2) ? SpriteEffects.FlipVertically : SpriteEffects.None;
+            Positie = Start.Positie + (Eind.Positie - Start.Positie) * new Vector2((float)(procent - (float)i / aantal) * aantal);
         }
     }
 }
