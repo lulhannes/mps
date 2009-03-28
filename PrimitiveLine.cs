@@ -33,7 +33,7 @@ namespace MPS
         /// Creates a new primitive line object.
         /// </summary>
         /// <param name="graphicsDevice">The Graphics Device object to use.</param>
-        public PrimitiveBrush(Color lineColor, GraphicsDevice graphicsDevice, float zoom)
+        public PrimitiveBrush(GraphicsDevice graphicsDevice, Color lineColor, float zoom)
         {
             // Create pixels
             pixel = new Texture2D(graphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);

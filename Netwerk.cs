@@ -10,7 +10,6 @@ namespace MPS
     public static class Netwerk
     {
         public static List<Apparaat> Apparatuur { get; private set; }
-        public static List<Apparaat[]> Verbindingen { get; private set; }
         public static List<Malware> Malwares { get; private set; }
         public static int Timer { get; set; }
 
@@ -19,7 +18,6 @@ namespace MPS
         static Netwerk()
         {
             Apparatuur = new List<Apparaat>();
-            Verbindingen = new List<Apparaat[]>();
             Malwares = new List<Malware>();
             Timer = 3000;
             timePrev = 0;
@@ -28,6 +26,11 @@ namespace MPS
         public static void AddComputer(ApparaatType type, int firewall, int antivirus, Vector2 positie)
         {
             Apparatuur.Add(new Computer(type, firewall, antivirus, positie));
+        }
+
+        public static void AddComputer(ApparaatType type, int firewall, int antivirus, int x, int y)
+        {
+            Apparatuur.Add(new Computer(type, firewall, antivirus, new Vector2(x, y)));
         }
 
         public static void AddNetwerkApparaat(ApparaatType type, Vector2 positie)
@@ -42,7 +45,8 @@ namespace MPS
 
         public static void Verbind(Apparaat app1, Apparaat app2)
         {
-            Verbindingen.Add(new Apparaat[] { app1, app2 });
+            if (app1 is NetwerkApparaat)
+                app2.Parent = app1;
         }
 
         public static void AddMalware(int firewall, int antivirus)
@@ -52,15 +56,16 @@ namespace MPS
 
         public static void Update(GameTime gameTime)
         {
-            if (gameTime.TotalGameTime.TotalMilliseconds - timePrev > Timer || timePrev == 0)
+            if (gameTime.TotalGameTime.TotalMilliseconds - timePrev > Timer)
             {
                 // Voeg nieuwe animaties toe
                 foreach (Apparaat a in Netwerk.Apparatuur)
-                    foreach (Malware mal in (from mal in a.Infecties where a.Firewall <= mal.Firewall select mal))
+                    foreach (Malware mal in (from mal in a.Infecties where a.Firewall <= mal.Firewall select mal).ToArray())
                         foreach (Apparaat b in mal.GetOngeinfecteerden())
-                            SpriteManager.Animaties.Add(new MalwareAnimatie(a.RouteNaar(b), mal));
+                            if (a.RouteNaar(b) != null)
+                                SpriteManager.Animaties.Add(new MalwareAnimatie(a.RouteNaar(b), mal));
 
-                timePrev = gameTime.TotalGameTime.TotalMilliseconds + 0.001;
+                timePrev = gameTime.TotalGameTime.TotalMilliseconds;
             }
 
             Malware.Update(gameTime);
@@ -72,7 +77,6 @@ namespace MPS
         public static void Test()
         {
             Apparatuur.Clear();
-            Verbindingen.Clear();
             Malwares.Clear();
             SpriteManager.Animaties.Clear();
 

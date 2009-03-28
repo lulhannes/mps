@@ -22,10 +22,11 @@ namespace MPS
         private formMain form;
         private MouseState mouseStateCurrent, mouseStatePrevious;
         private KeyboardState keyStateCurrent, keyStatePrevious;
-        private XNA2dCamera camera;
-        private float zoomStep, panStep; // Snelheid van camera
-        private Vector2 oorsprong; // Beginpositie van camera
-        private Vector2 schermMiddenBegin, schermMidden; // Midden van scherm (nodig voor coordinaten)
+        private float zoomStep, panStep; // Snelheid van SpriteManager.Camera
+        private Vector2 oorsprong; // Beginpositie van SpriteManager.Camera
+        private bool cameraSlepen;
+        private bool verbinden;
+        private Vector2[] verbindingslijn;
 
         public Game1(formMain form)
         {
@@ -44,7 +45,7 @@ namespace MPS
         {
             graphics.PreferredBackBufferWidth = form.Panel.Width;
             graphics.PreferredBackBufferHeight = form.Panel.Height;
-            schermMidden = new Vector2(form.Panel.Width / 2, form.Panel.Height / 2);
+            SpriteManager.SchermMidden = new Vector2(form.Panel.Width / 2, form.Panel.Height / 2);
             graphics.ApplyChanges();
         }
 
@@ -67,14 +68,17 @@ namespace MPS
         /// </summary>
         protected override void Initialize()
         {
-
-            camera = new XNA2dCamera(graphics);
-            camera.Zoom = new Vector2(0.5F);
+            SpriteManager.Camera = new XNA2dCamera(graphics);
+            SpriteManager.Camera.Zoom = new Vector2(0.5F);
             zoomStep = 0.01F;
             panStep = 5;
-            oorsprong = camera.Position;
-            schermMiddenBegin = new Vector2(form.Panel.Width / 2, form.Panel.Height / 2);
-            schermMidden = schermMiddenBegin;
+            oorsprong = SpriteManager.Camera.Position;
+            SpriteManager.SchermMiddenBegin = new Vector2(form.Panel.Width / 2, form.Panel.Height / 2);
+            SpriteManager.SchermMidden = SpriteManager.SchermMiddenBegin;
+
+            cameraSlepen = false;
+            verbinden = false;
+            verbindingslijn = null;
 
             Mouse.WindowHandle = IntPtr.Zero;
             Mouse.WindowHandle = form.Panel.Handle;
@@ -110,11 +114,11 @@ namespace MPS
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            System.Threading.Thread.Sleep(5); // Geef je CPU wat rust =]
+            System.Threading.Thread.Sleep(10); // Geef je CPU wat rust =]
 
-            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nschermMidden: {2}\nschermPositie: {3}\nMuis.Position: {4}\nInfecties.Count: {5}",
-                camera.Zoom.X, camera.Position, schermMidden, new Vector2(form.Left, form.Top),
-                new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y) - schermMidden,
+            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nSpriteManager.SchermMidden: {2}\nschermPositie: {3}\nMuis.Position: {4}\nInfecties.Count: {5}",
+                SpriteManager.Camera.Zoom.X, SpriteManager.Camera.Position, SpriteManager.SchermMidden, new Vector2(form.Left, form.Top),
+                new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y),
                 SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0);
 
             UpdateInput();
@@ -128,70 +132,102 @@ namespace MPS
             mouseStateCurrent = Mouse.GetState();
             keyStateCurrent = Keyboard.GetState();
 
-            // Selecteren
-            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Released
-                && !keyStateCurrent.IsKeyDown(Keys.Space))
+            // Apparaten verbinden
+            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && keyStateCurrent.IsKeyDown(Keys.LeftControl) || verbinden)
             {
-                SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X, true);
-            }
+                if (!verbinden)
+                    SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y));
 
+                if (SpriteManager.Geselecteerde != null)
+                {
+                    verbindingslijn = new Vector2[] {SpriteManager.Geselecteerde.Positie, new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y)};
+                }
+                verbinden = true;
+            }
+            // Camera slepen
+            else if (mouseStateCurrent.LeftButton == ButtonState.Pressed && keyStateCurrent.IsKeyDown(Keys.Space) || cameraSlepen)
+            {
+                SpriteManager.Camera.Position += (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y) - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y))
+                    / SpriteManager.Camera.Zoom.X;
+                cameraSlepen = true;
+            }
+            // Selecteren
+            else if (mouseStateCurrent.LeftButton == ButtonState.Pressed && mouseStatePrevious.LeftButton == ButtonState.Released &&
+                !form.MenuOpened)
+            {
+                SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y));
+            }
             // Object slepen
-            if (mouseStateCurrent.LeftButton == ButtonState.Pressed
-                && !keyStateCurrent.IsKeyDown(Keys.Space))
+            else if (mouseStateCurrent.LeftButton == ButtonState.Pressed &&
+                !cameraSlepen &&
+                !form.MenuOpened)
             {
                 if (SpriteManager.Geselecteerde != null)
                 {
                     SpriteManager.Geselecteerde.Positie -= (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y)
-                        - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y)) / camera.Zoom.X;
+                        - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y)) / SpriteManager.Camera.Zoom.X;
                 }
             }
 
-            // Camera slepen
-            if (mouseStateCurrent.LeftButton == ButtonState.Pressed && keyStateCurrent.IsKeyDown(Keys.Space))
+            // Muisknop losgelaten
+            if (mouseStateCurrent.LeftButton == ButtonState.Released && mouseStatePrevious.LeftButton == ButtonState.Pressed)
             {
-                camera.Position += (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y) - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y))
-                    / camera.Zoom.X;
+                cameraSlepen = false;
+                verbinden = false;
+                if (verbindingslijn != null)
+                {
+                    Apparaat app = SpriteManager.Click(verbindingslijn[1], false);
+                    if (app != null)
+                        Netwerk.Verbind(app, SpriteManager.Geselecteerde);
+                }
+                verbindingslijn = null;
             }
 
             // Zoom
             if (keyStateCurrent.IsKeyDown(Keys.OemPlus))
-                camera.Zoom += new Vector2(zoomStep);
+                SpriteManager.Camera.Zoom += new Vector2(zoomStep);
             if (keyStateCurrent.IsKeyDown(Keys.OemMinus))
-                camera.Zoom -= new Vector2(zoomStep);
+                SpriteManager.Camera.Zoom -= new Vector2(zoomStep);
 
             // Pan
-            float pan = panStep / camera.Zoom.X;
+            float pan = panStep / SpriteManager.Camera.Zoom.X;
             if (keyStateCurrent.IsKeyDown(Keys.LeftShift))
                 pan *= 3;
             if (keyStateCurrent.IsKeyDown(Keys.W))
-                camera.Position -= new Vector2(0, pan);
+                SpriteManager.Camera.Position -= new Vector2(0, pan);
             if (keyStateCurrent.IsKeyDown(Keys.S))
-                camera.Position += new Vector2(0, pan);
+                SpriteManager.Camera.Position += new Vector2(0, pan);
             if (keyStateCurrent.IsKeyDown(Keys.A))
-                camera.Position -= new Vector2(pan, 0);
+                SpriteManager.Camera.Position -= new Vector2(pan, 0);
             if (keyStateCurrent.IsKeyDown(Keys.D))
-                camera.Position += new Vector2(pan, 0);
+                SpriteManager.Camera.Position += new Vector2(pan, 0);
 
             // Snelheid
+            if (keyStateCurrent.IsKeyDown(Keys.OemCloseBrackets))
+                Netwerk.Timer -= Netwerk.Timer > 500 ? 100 : 0;
             if (keyStateCurrent.IsKeyDown(Keys.OemOpenBrackets))
-                Netwerk.Timer -= 100;
+                Netwerk.Timer += Netwerk.Timer < 5000 ? 100 : 0;
 
             // Reset
             if (keyStateCurrent.IsKeyDown(Keys.D0))
             {
-                camera.Position = oorsprong;
-                camera.Rotation = 0;
+                SpriteManager.Camera.Position = oorsprong;
+                SpriteManager.Camera.Rotation = 0;
                 Netwerk.Test();
             }
 
             // Verander muis
-            if (keyStateCurrent.IsKeyDown(Keys.Space) &&
-                mouseStateCurrent.X >= 0 && mouseStateCurrent.X <= schermMidden.X * 2 &&
-                mouseStateCurrent.Y >= 0 && mouseStateCurrent.Y <= schermMidden.Y * 2)
+            if (form.MenuOpened)
+            {
+                form.Cursor = System.Windows.Forms.Cursors.Default;
+            }
+            else if ((keyStateCurrent.IsKeyDown(Keys.Space) &&
+                mouseStateCurrent.X >= 0 && mouseStateCurrent.X <= SpriteManager.SchermMidden.X * 2 &&
+                mouseStateCurrent.Y >= 0 && mouseStateCurrent.Y <= SpriteManager.SchermMidden.Y * 2) || cameraSlepen)
             {
                 form.Cursor = System.Windows.Forms.Cursors.NoMove2D;
             }
-            else if (SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), schermMidden, schermMiddenBegin, camera.Position - oorsprong, camera.Zoom.X, false))
+            else if (SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), false) != null)
             {
                 form.Cursor = System.Windows.Forms.Cursors.Hand;
             }
@@ -212,8 +248,10 @@ namespace MPS
         {
             graphics.GraphicsDevice.Clear(Color.White);
 
-            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState, camera.ViewTransformationMatrix());
-            SpriteManager.DrawAll(spriteBatch, graphics.GraphicsDevice, camera.Zoom.X);
+            spriteBatch.Begin(SpriteBlendMode.AlphaBlend, SpriteSortMode.Deferred, SaveStateMode.SaveState, SpriteManager.Camera.ViewTransformationMatrix());
+            SpriteManager.DrawAll(spriteBatch, graphics.GraphicsDevice);
+            if (verbindingslijn != null)
+                SpriteManager.DrawVerbindingslijn(spriteBatch, graphics.GraphicsDevice, verbindingslijn[0], verbindingslijn[1]);
             spriteBatch.End();
 
             base.Draw(gameTime);

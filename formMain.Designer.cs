@@ -28,72 +28,66 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.treeNetwerken = new System.Windows.Forms.TreeView();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.components = new System.ComponentModel.Container();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.cntxtNetwerk = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.nieuweComputerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelInfo = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.nieuweRouterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nieuweSwitchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            this.cntxtNetwerk.SuspendLayout();
+            this.panelInfo.SuspendLayout();
             this.SuspendLayout();
             // 
-            // splitContainer1
+            // splitContainer
             // 
-            this.splitContainer1.BackColor = System.Drawing.Color.White;
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer.BackColor = System.Drawing.Color.White;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.IsSplitterFixed = true;
+            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Name = "splitContainer";
             // 
-            // splitContainer1.Panel1
+            // splitContainer.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeNetwerken);
+            this.splitContainer.Panel1.ContextMenuStrip = this.cntxtNetwerk;
             // 
-            // splitContainer1.Panel2
+            // splitContainer.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1184, 762);
-            this.splitContainer1.SplitterDistance = 137;
-            this.splitContainer1.TabIndex = 0;
+            this.splitContainer.Panel2.Controls.Add(this.panelInfo);
+            this.splitContainer.Size = new System.Drawing.Size(1347, 818);
+            this.splitContainer.SplitterDistance = 1137;
+            this.splitContainer.TabIndex = 0;
             // 
-            // treeNetwerken
+            // cntxtNetwerk
             // 
-            this.treeNetwerken.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.treeNetwerken.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeNetwerken.LabelEdit = true;
-            this.treeNetwerken.Location = new System.Drawing.Point(0, 0);
-            this.treeNetwerken.Name = "treeNetwerken";
-            this.treeNetwerken.Size = new System.Drawing.Size(137, 762);
-            this.treeNetwerken.TabIndex = 0;
+            this.cntxtNetwerk.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nieuweComputerToolStripMenuItem,
+            this.nieuweRouterToolStripMenuItem,
+            this.nieuweSwitchToolStripMenuItem});
+            this.cntxtNetwerk.Name = "cntxtNetwerk";
+            this.cntxtNetwerk.Size = new System.Drawing.Size(170, 92);
+            this.cntxtNetwerk.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cntxtNetwerk_Closed);
+            this.cntxtNetwerk.Opening += new System.ComponentModel.CancelEventHandler(this.cntxtNetwerk_Opening);
             // 
-            // splitContainer2
+            // nieuweComputerToolStripMenuItem
             // 
-            this.splitContainer2.BackColor = System.Drawing.Color.White;
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.nieuweComputerToolStripMenuItem.Name = "nieuweComputerToolStripMenuItem";
+            this.nieuweComputerToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.nieuweComputerToolStripMenuItem.Text = "Nieuwe computer";
+            this.nieuweComputerToolStripMenuItem.Click += new System.EventHandler(this.nieuweComputerToolStripMenuItem_Click);
             // 
-            // splitContainer2.Panel2
+            // panelInfo
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.panel1);
-            this.splitContainer2.Size = new System.Drawing.Size(1043, 762);
-            this.splitContainer2.SplitterDistance = 650;
-            this.splitContainer2.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1043, 108);
-            this.panel1.TabIndex = 1;
+            this.panelInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelInfo.Controls.Add(this.label1);
+            this.panelInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelInfo.Location = new System.Drawing.Point(0, 0);
+            this.panelInfo.Name = "panelInfo";
+            this.panelInfo.Size = new System.Drawing.Size(206, 818);
+            this.panelInfo.TabIndex = 2;
             // 
             // label1
             // 
@@ -104,32 +98,46 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Computer details:\n\nNetwerk:\n\nIP:\n\nType\n\nFirewall:\n\nVirusscanner:\n\nInfecties:";
             // 
+            // nieuweRouterToolStripMenuItem
+            // 
+            this.nieuweRouterToolStripMenuItem.Name = "nieuweRouterToolStripMenuItem";
+            this.nieuweRouterToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.nieuweRouterToolStripMenuItem.Text = "Nieuwe router";
+            this.nieuweRouterToolStripMenuItem.Click += new System.EventHandler(this.nieuweRouterToolStripMenuItem_Click);
+            // 
+            // nieuweSwitchToolStripMenuItem
+            // 
+            this.nieuweSwitchToolStripMenuItem.Name = "nieuweSwitchToolStripMenuItem";
+            this.nieuweSwitchToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.nieuweSwitchToolStripMenuItem.Text = "Nieuwe switch";
+            this.nieuweSwitchToolStripMenuItem.Click += new System.EventHandler(this.nieuweSwitchToolStripMenuItem_Click);
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 762);
-            this.Controls.Add(this.splitContainer1);
+            this.ClientSize = new System.Drawing.Size(1347, 818);
+            this.Controls.Add(this.splitContainer);
             this.Name = "formMain";
             this.Text = "formMain";
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            this.splitContainer2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.splitContainer.Panel2.ResumeLayout(false);
+            this.splitContainer.ResumeLayout(false);
+            this.cntxtNetwerk.ResumeLayout(false);
+            this.panelInfo.ResumeLayout(false);
+            this.panelInfo.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        public System.Windows.Forms.SplitContainer splitContainer1;
-        public System.Windows.Forms.SplitContainer splitContainer2;
-        public System.Windows.Forms.TreeView treeNetwerken;
         public System.Windows.Forms.Label label1;
-        public System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.Panel panelInfo;
+        private System.Windows.Forms.ContextMenuStrip cntxtNetwerk;
+        private System.Windows.Forms.ToolStripMenuItem nieuweComputerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nieuweRouterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nieuweSwitchToolStripMenuItem;
 
     }
 }
