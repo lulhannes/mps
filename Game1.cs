@@ -177,7 +177,8 @@ namespace MPS
                 if (verbindingslijn != null)
                 {
                     Apparaat app = SpriteManager.Click(verbindingslijn[1], false);
-                    if (app != null)
+                    if (app != null && app != SpriteManager.Geselecteerde && SpriteManager.Geselecteerde != app.Root &&
+                        (app.Type == ApparaatType.Router || app.Type == ApparaatType.Switch))
                         Netwerk.Verbind(app, SpriteManager.Geselecteerde);
                 }
                 verbindingslijn = null;

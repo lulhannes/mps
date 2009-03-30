@@ -186,8 +186,9 @@ namespace MPS
             Apparaat app = Click(b, false);
             b = (b - SchermMidden) / Camera.Zoom + Camera.Position;
 
+            // Kies de geschikte kleur
             Color color = Color.Red;
-            if (app != null && app != Geselecteerde)
+            if (app != null && app != Geselecteerde && (app.Type == ApparaatType.Router || app.Type == ApparaatType.Switch))
             {
                 color = Color.Green;
                 b = app.Positie;

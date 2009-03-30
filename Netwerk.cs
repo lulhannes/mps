@@ -45,7 +45,7 @@ namespace MPS
 
         public static void Verbind(Apparaat app1, Apparaat app2)
         {
-            if (app1 is NetwerkApparaat)
+            if (app1 is NetwerkApparaat && app2 != app2.Root && app1.Parent != app2)
                 app2.Parent = app1;
         }
 
@@ -60,7 +60,9 @@ namespace MPS
             {
                 // Voeg nieuwe animaties toe
                 foreach (Apparaat a in Netwerk.Apparatuur)
-                    foreach (Malware mal in (from mal in a.Infecties where a.Firewall <= mal.Firewall select mal).ToArray())
+                    foreach (Malware mal in (from mal in a.Infecties
+                                             where a.Firewall <= mal.Firewall
+                                             select mal).ToArray())
                         foreach (Apparaat b in mal.GetOngeinfecteerden())
                             if (a.RouteNaar(b) != null)
                                 SpriteManager.Animaties.Add(new MalwareAnimatie(a.RouteNaar(b), mal));

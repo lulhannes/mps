@@ -43,6 +43,11 @@ namespace MPS
             Netwerk.AddComputer(ApparaatType.Pc, 0, 0, SpriteManager.ConvertMuis(muis));
         }
 
+        private void nieuweLaptopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Netwerk.AddComputer(ApparaatType.Laptop, 0, 0, SpriteManager.ConvertMuis(muis));
+        }
+
         private void nieuweRouterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Netwerk.AddNetwerkApparaat(ApparaatType.Router, SpriteManager.ConvertMuis(muis));
