@@ -20,7 +20,7 @@ namespace System.Collections.Generic
             get { return _Parent; }
             set
             {
-                if (value == _Parent)
+                if (value == _Parent || value.Parents.Contains((T)this))
                 {
                     return;
                 }

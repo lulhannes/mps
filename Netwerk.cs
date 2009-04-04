@@ -43,10 +43,16 @@ namespace MPS
             Apparatuur.RemoveAt(index);
         }
 
-        public static void Verbind(Apparaat app1, Apparaat app2)
+        public static void Verbind(Apparaat a1, Apparaat a2)
         {
-            if (app1 is NetwerkApparaat && app2 != app2.Root && app1.Parent != app2)
-                app2.Parent = app1;
+            if (KanVerbinden(a1, a2))
+                a2.Parent = a1;
+        }
+
+        public static bool KanVerbinden(Apparaat a1, Apparaat a2)
+        {
+            return (a1 != null && a2 != null && a1 != a2 && a2 != a1.Root && a1.Parent != a2 && a1 is NetwerkApparaat &&
+                (a1 != a1.Root || a1.Children.Count == 0) && !a1.Parents.Contains(a2));
         }
 
         public static void AddMalware(int firewall, int antivirus)

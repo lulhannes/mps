@@ -116,10 +116,10 @@ namespace MPS
         {
             System.Threading.Thread.Sleep(10); // Geef je CPU wat rust =]
 
-            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nSpriteManager.SchermMidden: {2}\nschermPositie: {3}\nMuis.Position: {4}\nInfecties.Count: {5}",
-                SpriteManager.Camera.Zoom.X, SpriteManager.Camera.Position, SpriteManager.SchermMidden, new Vector2(form.Left, form.Top),
-                new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y),
-                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0);
+            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nInfecties.Count: {2}\ngeselecteerde: {3}",
+                SpriteManager.Camera.Zoom.X, SpriteManager.Camera.Position,
+                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0,
+                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.ToString() : string.Empty);
 
             UpdateInput();
             Netwerk.Update(gameTime);
@@ -177,9 +177,7 @@ namespace MPS
                 if (verbindingslijn != null)
                 {
                     Apparaat app = SpriteManager.Click(verbindingslijn[1], false);
-                    if (app != null && app != SpriteManager.Geselecteerde && SpriteManager.Geselecteerde != app.Root &&
-                        (app.Type == ApparaatType.Router || app.Type == ApparaatType.Switch))
-                        Netwerk.Verbind(app, SpriteManager.Geselecteerde);
+                    Netwerk.Verbind(app, SpriteManager.Geselecteerde);
                 }
                 verbindingslijn = null;
             }

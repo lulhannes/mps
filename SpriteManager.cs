@@ -188,7 +188,7 @@ namespace MPS
 
             // Kies de geschikte kleur
             Color color = Color.Red;
-            if (app != null && app != Geselecteerde && (app.Type == ApparaatType.Router || app.Type == ApparaatType.Switch))
+            if (Netwerk.KanVerbinden(app, Geselecteerde))
             {
                 color = Color.Green;
                 b = app.Positie;
