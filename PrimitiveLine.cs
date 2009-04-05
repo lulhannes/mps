@@ -33,12 +33,14 @@ namespace MPS
         /// Creates a new primitive line object.
         /// </summary>
         /// <param name="graphicsDevice">The Graphics Device object to use.</param>
+        /// <param name="lineColor">The color this brush draws with.</param>
+        /// <param name="zoom">Scale according to this zoom factor.</param>
         public PrimitiveBrush(GraphicsDevice graphicsDevice, Color lineColor, float zoom)
         {
             // Create pixels
             pixel = new Texture2D(graphicsDevice, 1, 1, 1, TextureUsage.None, SurfaceFormat.Color);
             Color[] pixels = { Color.White };
-            pixel.SetData<Color>(pixels);
+            pixel.SetData(pixels);
 
             Position = new Vector2(0, 0);
             Depth = 0;
@@ -52,15 +54,16 @@ namespace MPS
         /// </summary>
         /// <param name="radius">The radius (half the width) of the circle.</param>
         /// <param name="sides">The number of sides on the circle (the more the detailed).</param>
+        /// <param name="spriteBatch">The Spritebatch to draw with.</param>
         public void DrawCircle(float radius, int sides, SpriteBatch spriteBatch)
         {
             float max = 2 * (float)Math.PI;
-            float step = max / (float)sides;
+            float step = max / sides;
 
             for (float theta = 0; theta < max; theta += step)
             {
-                vectors.Add(new Vector2(radius * (float)Math.Cos((double)theta),
-                    radius * (float)Math.Sin((double)theta)));
+                vectors.Add(new Vector2(radius * (float)Math.Cos(theta),
+                    radius * (float)Math.Sin(theta)));
             }
 
             // Then add the first vector again so it's a complete loop
@@ -105,14 +108,14 @@ namespace MPS
 
             for (int i = 1; i < vectors.Count; i++)
             {
-                Vector2 vector1 = (Vector2)vectors[i - 1];
-                Vector2 vector2 = (Vector2)vectors[i];
+                Vector2 vector1 = vectors[i - 1];
+                Vector2 vector2 = vectors[i];
 
                 // Calculate the distance between the two vectors
                 float distance = Vector2.Distance(vector1, vector2);
 
                 // Calculate the angle between the two vectors
-                float angle = (float)Math.Atan2((double)(vector2.Y - vector1.Y), (double)(vector2.X - vector1.X));
+                float angle = (float)Math.Atan2(vector2.Y - vector1.Y, vector2.X - vector1.X);
 
                 // Stretch the pixel between the two vectors
                 spriteBatch.Draw(pixel,

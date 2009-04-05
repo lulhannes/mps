@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MPS
@@ -29,9 +28,12 @@ namespace MPS
         }
 
         /// <summary>
-        /// Zoekt een object onder de muis en selecteert deze.
-        /// Returnt de index van dit object in Netwerk.Apparatuur, of -1.
+        /// Zoekt een apparaat onder de muis en selecteert deze (optioneel).
+        /// Returnt dit apparaat of null.
         /// </summary>
+        /// <param name="muis">De coordinaten van de muis.</param>
+        /// <param name="selecteer">Als <c>true</c> dan wordt het gevonden apparaat geselecteerd.</param>
+        /// <returns></returns>
         public static Apparaat Click(Vector2 muis, bool selecteer)
         {
             muis -= SchermMidden;
@@ -45,8 +47,8 @@ namespace MPS
             {
                 Apparaat app = Netwerk.Apparatuur[i];
                 Vector2 coord = (app.Positie - Camera.Position) * Camera.Zoom;
-                if (System.Math.Abs(coord.X - muis.X) < app.Texture.Width / 2 * Camera.Zoom.X
-                    && System.Math.Abs(coord.Y - muis.Y) < app.Texture.Height / 2 * Camera.Zoom.Y)
+                if (Math.Abs(coord.X - muis.X) < app.Texture.Width / 2 * Camera.Zoom.X
+                    && Math.Abs(coord.Y - muis.Y) < app.Texture.Height / 2 * Camera.Zoom.Y)
                 {
                     if (selecteer)
                     {
@@ -130,8 +132,8 @@ namespace MPS
                 Apparaat a2 = a1.Parent;
 
                 // Bereken hoek tussen de 2 apparaten
-                double hoek = Math.Atan2((double)(a2.Positie.Y - a1.Positie.Y), (double)(a2.Positie.X - a1.Positie.X));
-
+                double hoek = Math.Atan2((a2.Positie.Y - a1.Positie.Y), (a2.Positie.X - a1.Positie.X));
+                
                 // Bereken daarmee de gewenste offset van de lijn
                 float xOffset = 128;
                 float yOffset = xOffset * (float)Math.Tan(hoek);
@@ -158,8 +160,8 @@ namespace MPS
                 float xOffset2 = xOffset * -xRichting;
                 float yOffset2 = yOffset * yRichting;
 
-                if (System.Math.Abs(a1.Positie.X - a2.Positie.X) > a1.Texture.Width ||
-                    System.Math.Abs(a1.Positie.Y - a2.Positie.Y) > a1.Texture.Width)
+                if (Math.Abs(a1.Positie.X - a2.Positie.X) > a1.Texture.Width ||
+                    Math.Abs(a1.Positie.Y - a2.Positie.Y) > a1.Texture.Width)
                 {
                     brush.DrawLine(a1.Positie + new Vector2(xOffset1, yOffset1), a2.Positie + new Vector2(xOffset2, yOffset2), spriteBatch);
                 }
@@ -183,60 +185,18 @@ namespace MPS
 
         public static void DrawVerbindingslijn(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, Vector2 a, Vector2 b)
         {
-            Apparaat app = Click(b, false);
+            Apparaat ouder = Click(b, false);
             b = (b - SchermMidden) / Camera.Zoom + Camera.Position;
 
             // Kies de geschikte kleur
             Color color = Color.Red;
-            if (Netwerk.KanVerbinden(app, Geselecteerde))
+            if (Netwerk.KanVerbinden(Geselecteerde, ouder))
             {
                 color = Color.Green;
-                b = app.Positie;
+                b = ouder.Positie;
             }
             PrimitiveBrush brush = new PrimitiveBrush(graphicsDevice, color, Camera.Zoom.X / 4);
             brush.DrawLine(a, b, spriteBatch);
-        }
-    }
-
-    public class MalwareAnimatie
-    {
-        public Apparaat Start { get; private set; }
-        public Apparaat Eind { get; private set; }
-        public float Hoek { get; private set; }
-        public SpriteEffects Effect { get; private set; }
-        public Vector2 Positie { get; private set; }
-        public bool Klaar { get; private set; }
-        public Malware Malware { get; private set; }
-
-        private List<Apparaat> route;
-        private int aantal;
-        private double procent;
-
-        public MalwareAnimatie(List<Apparaat> route, Malware malware)
-        {
-            Positie = route[0].Positie;
-            Klaar = false;
-            Malware = malware;
-            this.route = route;
-            aantal = route.Count - 1;
-            procent = 0;
-        }
-
-        public void Update(Double time)
-        {
-            procent += time / Netwerk.Timer;
-            if (procent >= 1)
-            {
-                Klaar = true;
-                return;
-            }
-
-            int i = (int)(aantal * procent);
-            Start = route[i];
-            Eind = route[i + 1];
-            Hoek = (float)Math.Atan2((float)(Eind.Positie.Y - Start.Positie.Y), (float)(Eind.Positie.X - Start.Positie.X));
-            Effect = (Hoek > Math.PI / 2 || Hoek < Math.PI / -2) ? SpriteEffects.FlipVertically : SpriteEffects.None;
-            Positie = Start.Positie + (Eind.Positie - Start.Positie) * new Vector2((float)(procent - (float)i / aantal) * aantal);
         }
     }
 }

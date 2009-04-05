@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System.Drawing;
 
 public class XNA2dCamera : GraphicsDeviceManager
@@ -54,7 +53,7 @@ public class XNA2dCamera : GraphicsDeviceManager
     #endregion Culling
 
     #region Transformations
-    protected float rotation = 0.0f;
+    protected float rotation;
     public float Rotation
     {
         get { return rotation; }
@@ -122,8 +121,8 @@ public class XNA2dCamera : GraphicsDeviceManager
         // Then, we scale and rotate around the origin
         // Finally, we translate to SCREEN coordinates, so translation is based on the ScreenCenter
         return Matrix.CreateTranslation(-matrixRotOrigin) *
-            Matrix.CreateScale(this.Zoom.X, this.Zoom.Y, 1.0f) *
-            Matrix.CreateRotationZ(this.Rotation) *
+            Matrix.CreateScale(Zoom.X, Zoom.Y, 1.0f) *
+            Matrix.CreateRotationZ(Rotation) *
             Matrix.CreateTranslation(matrixScreenPos);
     }
     #endregion Methods

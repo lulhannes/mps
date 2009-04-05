@@ -7,10 +7,10 @@ namespace MPS
         static Game1 game;
 
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
             formMain form = new formMain();
-            form.Disposed += new EventHandler(form_Disposed);
+            form.Disposed += form_Disposed;
             using (game = new Game1(form))
             {
                 form.Show();

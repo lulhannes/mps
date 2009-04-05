@@ -1,6 +1,8 @@
 bin/*
 obj/*
 Content/obj/*
+_ReSharper*
+*resharper*
 *.cachefile
 *.suo
 *Thumbs.db

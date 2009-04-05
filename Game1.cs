@@ -1,21 +1,14 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
 
 namespace MPS
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
@@ -31,11 +24,11 @@ namespace MPS
         public Game1(formMain form)
         {
             this.form = form;
-            System.Windows.Forms.Form xnaWindow = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle((this.Window.Handle));
-            xnaWindow.GotFocus += new EventHandler(xnaWindow_GotFocus);
-            form.Panel.Resize += new EventHandler(Panel_Resize);
+            System.Windows.Forms.Form xnaWindow = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle((Window.Handle));
+            xnaWindow.GotFocus += xnaWindow_GotFocus;
+            form.Panel.Resize += Panel_Resize;
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreparingDeviceSettings += new EventHandler<PreparingDeviceSettingsEventArgs>(graphics_PreparingDeviceSettings);
+            graphics.PreparingDeviceSettings += graphics_PreparingDeviceSettings;
             graphics.PreferredBackBufferWidth = form.Panel.Width;
             graphics.PreferredBackBufferHeight = form.Panel.Height;
             Content.RootDirectory = "Content";
@@ -68,8 +61,7 @@ namespace MPS
         /// </summary>
         protected override void Initialize()
         {
-            SpriteManager.Camera = new XNA2dCamera(graphics);
-            SpriteManager.Camera.Zoom = new Vector2(0.5F);
+            SpriteManager.Camera = new XNA2dCamera(graphics) { Zoom = new Vector2(0.5F) };
             zoomStep = 0.01F;
             panStep = 5;
             oorsprong = SpriteManager.Camera.Position;
@@ -140,7 +132,7 @@ namespace MPS
 
                 if (SpriteManager.Geselecteerde != null)
                 {
-                    verbindingslijn = new Vector2[] {SpriteManager.Geselecteerde.Positie, new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y)};
+                    verbindingslijn = new[] { SpriteManager.Geselecteerde.Positie, new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y) };
                 }
                 verbinden = true;
             }
@@ -176,8 +168,7 @@ namespace MPS
                 verbinden = false;
                 if (verbindingslijn != null)
                 {
-                    Apparaat app = SpriteManager.Click(verbindingslijn[1], false);
-                    Netwerk.Verbind(app, SpriteManager.Geselecteerde);
+                    Netwerk.Verbind(SpriteManager.Geselecteerde, SpriteManager.Click(verbindingslijn[1], false));
                 }
                 verbindingslijn = null;
             }
@@ -216,24 +207,18 @@ namespace MPS
             }
 
             // Verander muis
+            Apparaat onderMuis = SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), false);
             if (form.MenuOpened)
-            {
                 form.Cursor = System.Windows.Forms.Cursors.Default;
-            }
             else if ((keyStateCurrent.IsKeyDown(Keys.Space) &&
-                mouseStateCurrent.X >= 0 && mouseStateCurrent.X <= SpriteManager.SchermMidden.X * 2 &&
-                mouseStateCurrent.Y >= 0 && mouseStateCurrent.Y <= SpriteManager.SchermMidden.Y * 2) || cameraSlepen)
-            {
+                      mouseStateCurrent.X >= 0 && mouseStateCurrent.X <= SpriteManager.SchermMidden.X * 2 &&
+                      mouseStateCurrent.Y >= 0 && mouseStateCurrent.Y <= SpriteManager.SchermMidden.Y * 2) ||
+                     cameraSlepen)
                 form.Cursor = System.Windows.Forms.Cursors.NoMove2D;
-            }
-            else if (SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y), false) != null)
-            {
+            else if (onderMuis != null)
                 form.Cursor = System.Windows.Forms.Cursors.Hand;
-            }
             else
-            {
                 form.Cursor = System.Windows.Forms.Cursors.Default;
-            }
 
             mouseStatePrevious = mouseStateCurrent;
             keyStatePrevious = keyStateCurrent;

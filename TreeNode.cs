@@ -3,8 +3,6 @@
 // Original Tree<T> blog article: http://dvanderboom.wordpress.com/2008/03/15/treet-implementing-a-non-binary-tree-in-c/
 // Linked-in: http://www.linkedin.com/profile?viewProfile=&key=13009616&trk=tab_pro
 
-using System;
-using System.Text;
 using System.Linq;
 
 namespace System.Collections.Generic
@@ -30,7 +28,7 @@ namespace System.Collections.Generic
                     _Parent.Children.Remove(this);
                 }
 
-                if (value != null && !value.Children.Contains(this))
+                if (!value.Children.Contains(this))
                 {
                     value.Children.Add(this);
                 }
@@ -134,10 +132,10 @@ namespace System.Collections.Generic
 
         public List<T> RouteNaar(TreeNode<T> node2)
         {
-            if (this.Root != node2.Root)
+            if (Root != node2.Root)
                 return null;
 
-            List<T> nodes1 = this.Parents;
+            List<T> nodes1 = Parents;
             nodes1.Insert(0, (T)this);
             List<T> nodes2 = node2.Parents;
             nodes2.Insert(0, (T)node2);
@@ -166,7 +164,7 @@ namespace System.Collections.Generic
 
         public override string ToString()
         {
-            string Description = "Depth=" + Depth.ToString() + ", Children=" + Children.Count.ToString();
+            string Description = string.Format("Depth={0}, Children={1}", Depth, Children.Count);
             if (this == Root)
             {
                 Description += " (Root)";

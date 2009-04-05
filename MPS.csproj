@@ -86,6 +86,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MalwareAnimatie.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="TreeNodeList.cs" />
     <Compile Include="formMain.cs">

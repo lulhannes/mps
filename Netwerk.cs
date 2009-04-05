@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using System.Linq;
 
 namespace MPS
@@ -43,16 +40,27 @@ namespace MPS
             Apparatuur.RemoveAt(index);
         }
 
+        /// <summary>
+        /// Verbind twee apparaten indien mogelijk.
+        /// </summary>
+        /// <param name="a1">Het kind.</param>
+        /// <param name="a2">De ouder.</param>
         public static void Verbind(Apparaat a1, Apparaat a2)
         {
             if (KanVerbinden(a1, a2))
-                a2.Parent = a1;
+                a1.Parent = a2;
         }
 
+        /// <summary>
+        /// Controleer of twee apparaten verbonden kunnen worden.
+        /// </summary>
+        /// <param name="a1">Het kind.</param>
+        /// <param name="a2">De ouder.</param>
+        /// <returns></returns>
         public static bool KanVerbinden(Apparaat a1, Apparaat a2)
         {
-            return (a1 != null && a2 != null && a1 != a2 && a2 != a1.Root && a1.Parent != a2 && a1 is NetwerkApparaat &&
-                (a1 != a1.Root || a1.Children.Count == 0) && !a1.Parents.Contains(a2));
+            return (a2 != null && a1 != null && a2 != a1 && a1 != a2.Root && a2.Parent != a1 && a2 is NetwerkApparaat &&
+                (a2 != a2.Root || a2.Children.Count == 0) && !a2.Parents.Contains(a1));
         }
 
         public static void AddMalware(int firewall, int antivirus)
@@ -65,10 +73,8 @@ namespace MPS
             if (gameTime.TotalGameTime.TotalMilliseconds - timePrev > Timer)
             {
                 // Voeg nieuwe animaties toe
-                foreach (Apparaat a in Netwerk.Apparatuur)
-                    foreach (Malware mal in (from mal in a.Infecties
-                                             where a.Firewall <= mal.Firewall
-                                             select mal).ToArray())
+                foreach (Apparaat a in Apparatuur)
+                    foreach (Malware mal in (a.Infecties.Where(m => a.Firewall <= m.Firewall)).ToArray())
                         foreach (Apparaat b in mal.GetOngeinfecteerden())
                             if (a.RouteNaar(b) != null)
                                 SpriteManager.Animaties.Add(new MalwareAnimatie(a.RouteNaar(b), mal));

@@ -3,9 +3,6 @@
 // Original Tree<T> blog article: http://dvanderboom.wordpress.com/2008/03/15/treet-implementing-a-non-binary-tree-in-c/
 // Linked-in: http://www.linkedin.com/profile?viewProfile=&key=13009616&trk=tab_pro
 
-using System;
-using System.Text;
-
 namespace System.Collections.Generic
 {
     /// <summary>
@@ -38,7 +35,7 @@ namespace System.Collections.Generic
 
         public override string ToString()
         {
-            return "Count=" + Count.ToString();
+            return string.Format("Count={0}", Count);
         }
     }
 }
