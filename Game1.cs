@@ -108,9 +108,17 @@ namespace MPS
         {
             System.Threading.Thread.Sleep(10); // Geef je CPU wat rust =]
 
-            UpdateInput();
-            Netwerk.Update(gameTime);
+            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nInfecties.Count: {2}\ngeselecteerde: {3}",
+                SpriteManager.Camera.Zoom.X, SpriteManager.Camera.Position,
+                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0,
+                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.ToString() : string.Empty);
 
+            if (IsActive)
+            {
+                UpdateInput();
+            }
+
+            Netwerk.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -197,6 +205,9 @@ namespace MPS
                 Netwerk.Timer -= Netwerk.Timer > 500 ? 100 : 0;
             if (keyStateCurrent.IsKeyDown(Keys.OemOpenBrackets))
                 Netwerk.Timer += Netwerk.Timer < 5000 ? 100 : 0;
+
+            if (keyStateCurrent.IsKeyDown(Keys.Delete))
+                Netwerk.RemoveApparaat(SpriteManager.Geselecteerde);
 
             // Reset
             if (keyStateCurrent.IsKeyDown(Keys.D0))
