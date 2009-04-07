@@ -25,19 +25,24 @@ namespace MPS
             Apparatuur.Add(new Computer(type, firewall, antivirus, positie));
         }
 
-        public static void AddComputer(ApparaatType type, int firewall, int antivirus, int x, int y)
-        {
-            Apparatuur.Add(new Computer(type, firewall, antivirus, new Vector2(x, y)));
-        }
-
         public static void AddNetwerkApparaat(ApparaatType type, Vector2 positie)
         {
             Apparatuur.Add(new NetwerkApparaat(type, positie));
         }
 
-        public static void RemoveApparaat(int index)
+        public static void RemoveApparaat(Apparaat app)
         {
-            Apparatuur.RemoveAt(index);
+            VerbreekVerbinding(app);
+            foreach (var child in app.Children)
+            {
+                child.Parent = null;
+            }
+            Apparatuur.Remove(app);
+        }
+
+        public static void AddMalware(string naam, int firewall, int antivirus)
+        {
+            Malwares.Add(new Malware(naam, firewall, antivirus));
         }
 
         /// <summary>
@@ -51,6 +56,14 @@ namespace MPS
                 a1.Parent = a2;
         }
 
+        public static void VerbreekVerbinding(Apparaat app)
+        {
+            if (app.Parent != null)
+            {
+                app.Parent.Children.Remove(app);
+            }
+        }
+
         /// <summary>
         /// Controleer of twee apparaten verbonden kunnen worden.
         /// </summary>
@@ -61,11 +74,6 @@ namespace MPS
         {
             return (a2 != null && a1 != null && a2 != a1 && a1 != a2.Root && a2.Parent != a1 && a2 is NetwerkApparaat &&
                 (a2 != a2.Root || a2.Children.Count == 0) && !a2.Parents.Contains(a1));
-        }
-
-        public static void AddMalware(int firewall, int antivirus)
-        {
-            Malwares.Add(new Malware(firewall, antivirus));
         }
 
         public static void Update(GameTime gameTime)
@@ -111,7 +119,7 @@ namespace MPS
             Apparatuur[3].Children.Add(Apparatuur[6]);
             Apparatuur[3].Children.Add(Apparatuur[7]);
 
-            AddMalware(0, 0);
+            AddMalware("Test", 0, 0);
             Malwares[0].Infecteer(Apparatuur[5]);
         }
     }

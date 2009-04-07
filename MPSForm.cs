@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Linq;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace MPS
 {
-    public partial class formMain : Form
+    public partial class MPSForm : Form
     {
         public bool MenuOpened { get; set; }
 
         private Point muis;
 
-        public formMain()
+        public MPSForm()
         {
             InitializeComponent();
 
@@ -28,6 +29,11 @@ namespace MPS
         {
             MenuOpened = true;
             muis = Panel.PointToClient(MousePosition);
+
+            bool isGeselecteerd = SpriteManager.Geselecteerde != null;
+            {
+                cntxtNetwerk.Items[2].Enabled = isGeselecteerd;
+            }
         }
 
         private void cntxtNetwerk_Closed(object sender, ToolStripDropDownClosedEventArgs e)
@@ -53,6 +59,16 @@ namespace MPS
         private void nieuweSwitchToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Netwerk.AddNetwerkApparaat(ApparaatType.Switch, SpriteManager.ConvertMuis(muis));
+        }
+
+        private void verwijderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Netwerk.RemoveApparaat(SpriteManager.Geselecteerde);
+        }
+
+        private void verbreekVerbindingMetOuderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Netwerk.VerbreekVerbinding(SpriteManager.Geselecteerde);
         }
     }
 }

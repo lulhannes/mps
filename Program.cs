@@ -9,7 +9,7 @@ namespace MPS
         [STAThread]
         static void Main()
         {
-            formMain form = new formMain();
+            MPSForm form = new MPSForm();
             form.Disposed += form_Disposed;
             using (game = new Game1(form))
             {

@@ -18,6 +18,12 @@ namespace System.Collections.Generic
             get { return _Parent; }
             set
             {
+                if (value == null)
+                {
+                    _Parent = value;
+                    return;
+                }
+
                 if (value == _Parent || value.Parents.Contains((T)this))
                 {
                     return;

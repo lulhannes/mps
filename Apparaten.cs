@@ -19,7 +19,6 @@ namespace MPS
     {
         public ApparaatType Type { get; private set; }
         public Texture2D TextureNormaal { get; private set; }
-        public Texture2D TextureGeinfecteerd { get; private set; }
         public Texture2D TextureGeselecteerd { get; private set; }
         public Texture2D Texture { get; set; }
         public Vector2 Positie { get; set; }

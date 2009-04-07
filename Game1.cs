@@ -12,7 +12,7 @@ namespace MPS
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private formMain form;
+        private MPSForm form;
         private MouseState mouseStateCurrent, mouseStatePrevious;
         private KeyboardState keyStateCurrent, keyStatePrevious;
         private float zoomStep, panStep; // Snelheid van SpriteManager.Camera
@@ -21,7 +21,7 @@ namespace MPS
         private bool verbinden;
         private Vector2[] verbindingslijn;
 
-        public Game1(formMain form)
+        public Game1(MPSForm form)
         {
             this.form = form;
             System.Windows.Forms.Form xnaWindow = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle((Window.Handle));
@@ -159,6 +159,11 @@ namespace MPS
                     SpriteManager.Geselecteerde.Positie -= (new Vector2(mouseStatePrevious.X, mouseStatePrevious.Y)
                         - new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y)) / SpriteManager.Camera.Zoom.X;
                 }
+            }
+            // Rechtermuisknop
+            else if (mouseStateCurrent.RightButton == ButtonState.Pressed)
+            {
+                SpriteManager.Click(new Vector2(mouseStateCurrent.X, mouseStateCurrent.Y));
             }
 
             // Muisknop losgelaten

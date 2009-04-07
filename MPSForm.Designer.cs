@@ -1,6 +1,6 @@
 ﻿namespace MPS
 {
-    partial class formMain
+    partial class MPSForm
     {
         /// <summary>
         /// Required designer variable.
@@ -31,12 +31,15 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.cntxtNetwerk = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.nieuweComputerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nieuweRouterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nieuweSwitchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.verbreekVerbindingMetOuderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.verwijderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.nieuweLaptopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.cntxtNetwerk.SuspendLayout();
@@ -65,35 +68,66 @@
             // cntxtNetwerk
             // 
             this.cntxtNetwerk.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nieuweComputerToolStripMenuItem,
-            this.nieuweLaptopToolStripMenuItem,
-            this.nieuweRouterToolStripMenuItem,
-            this.nieuweSwitchToolStripMenuItem});
+            this.toolStripMenuItem1,
+            this.verbreekVerbindingMetOuderToolStripMenuItem,
+            this.verwijderToolStripMenuItem});
             this.cntxtNetwerk.Name = "cntxtNetwerk";
-            this.cntxtNetwerk.Size = new System.Drawing.Size(170, 114);
+            this.cntxtNetwerk.Size = new System.Drawing.Size(181, 70);
             this.cntxtNetwerk.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.cntxtNetwerk_Closed);
             this.cntxtNetwerk.Opening += new System.ComponentModel.CancelEventHandler(this.cntxtNetwerk_Opening);
             // 
-            // nieuweComputerToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.nieuweComputerToolStripMenuItem.Name = "nieuweComputerToolStripMenuItem";
-            this.nieuweComputerToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.nieuweComputerToolStripMenuItem.Text = "Nieuwe computer";
-            this.nieuweComputerToolStripMenuItem.Click += new System.EventHandler(this.nieuweComputerToolStripMenuItem_Click);
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem5});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "Nieuw...";
             // 
-            // nieuweRouterToolStripMenuItem
+            // toolStripMenuItem2
             // 
-            this.nieuweRouterToolStripMenuItem.Name = "nieuweRouterToolStripMenuItem";
-            this.nieuweRouterToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.nieuweRouterToolStripMenuItem.Text = "Nieuwe router";
-            this.nieuweRouterToolStripMenuItem.Click += new System.EventHandler(this.nieuweRouterToolStripMenuItem_Click);
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(128, 22);
+            this.toolStripMenuItem2.Text = "Switch";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.nieuweSwitchToolStripMenuItem_Click);
             // 
-            // nieuweSwitchToolStripMenuItem
+            // toolStripMenuItem3
             // 
-            this.nieuweSwitchToolStripMenuItem.Name = "nieuweSwitchToolStripMenuItem";
-            this.nieuweSwitchToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.nieuweSwitchToolStripMenuItem.Text = "Nieuwe switch";
-            this.nieuweSwitchToolStripMenuItem.Click += new System.EventHandler(this.nieuweSwitchToolStripMenuItem_Click);
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(128, 22);
+            this.toolStripMenuItem3.Text = "Router";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.nieuweRouterToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(128, 22);
+            this.toolStripMenuItem4.Text = "Laptop";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.nieuweLaptopToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(128, 22);
+            this.toolStripMenuItem5.Text = "Computer";
+            this.toolStripMenuItem5.Click += new System.EventHandler(this.nieuweComputerToolStripMenuItem_Click);
+            // 
+            // verbreekVerbindingMetOuderToolStripMenuItem
+            // 
+            this.verbreekVerbindingMetOuderToolStripMenuItem.Name = "verbreekVerbindingMetOuderToolStripMenuItem";
+            this.verbreekVerbindingMetOuderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.verbreekVerbindingMetOuderToolStripMenuItem.Text = "Verbreek verbinding";
+            this.verbreekVerbindingMetOuderToolStripMenuItem.Click += new System.EventHandler(this.verbreekVerbindingMetOuderToolStripMenuItem_Click);
+            // 
+            // verwijderToolStripMenuItem
+            // 
+            this.verwijderToolStripMenuItem.Name = "verwijderToolStripMenuItem";
+            this.verwijderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.verwijderToolStripMenuItem.Text = "Verwijder apparaat";
+            this.verwijderToolStripMenuItem.Click += new System.EventHandler(this.verwijderToolStripMenuItem_Click);
             // 
             // panelInfo
             // 
@@ -114,20 +148,13 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Computer details:\n\nNetwerk:\n\nIP:\n\nType\n\nFirewall:\n\nVirusscanner:\n\nInfecties:";
             // 
-            // nieuweLaptopToolStripMenuItem
-            // 
-            this.nieuweLaptopToolStripMenuItem.Name = "nieuweLaptopToolStripMenuItem";
-            this.nieuweLaptopToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.nieuweLaptopToolStripMenuItem.Text = "Nieuwe laptop";
-            this.nieuweLaptopToolStripMenuItem.Click += new System.EventHandler(this.nieuweLaptopToolStripMenuItem_Click);
-            // 
-            // formMain
+            // MPSForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1347, 818);
             this.Controls.Add(this.splitContainer);
-            this.Name = "formMain";
+            this.Name = "MPSForm";
             this.Text = "formMain";
             this.splitContainer.Panel2.ResumeLayout(false);
             this.splitContainer.ResumeLayout(false);
@@ -144,10 +171,13 @@
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.ContextMenuStrip cntxtNetwerk;
-        private System.Windows.Forms.ToolStripMenuItem nieuweComputerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nieuweRouterToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nieuweSwitchToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nieuweLaptopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem verwijderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem verbreekVerbindingMetOuderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
 
     }
 }
