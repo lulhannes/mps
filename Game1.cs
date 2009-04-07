@@ -108,11 +108,6 @@ namespace MPS
         {
             System.Threading.Thread.Sleep(10); // Geef je CPU wat rust =]
 
-            form.label1.Text = String.Format("Camera.Zoom: {0}\nCamera.Position: {1}\nInfecties.Count: {2}\ngeselecteerde: {3}",
-                SpriteManager.Camera.Zoom.X, SpriteManager.Camera.Position,
-                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0,
-                SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.ToString() : string.Empty);
-
             UpdateInput();
             Netwerk.Update(gameTime);
 

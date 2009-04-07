@@ -39,11 +39,25 @@
             this.verbreekVerbindingMetOuderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.verwijderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelInfo = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.pbIcon = new System.Windows.Forms.PictureBox();
+            this.gbMalware = new System.Windows.Forms.GroupBox();
+            this.btnAdd = new System.Windows.Forms.Button();
+            this.btnRemove = new System.Windows.Forms.Button();
+            this.lbInfecties = new System.Windows.Forms.ListBox();
+            this.gbApparaat = new System.Windows.Forms.GroupBox();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.lblAntivirus = new System.Windows.Forms.Label();
+            this.lblFirewall = new System.Windows.Forms.Label();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.cntxtNetwerk.SuspendLayout();
             this.panelInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbIcon)).BeginInit();
+            this.gbMalware.SuspendLayout();
+            this.gbApparaat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer
@@ -61,8 +75,8 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.panelInfo);
-            this.splitContainer.Size = new System.Drawing.Size(1347, 818);
-            this.splitContainer.SplitterDistance = 1137;
+            this.splitContainer.Size = new System.Drawing.Size(1076, 568);
+            this.splitContainer.SplitterDistance = 906;
             this.splitContainer.TabIndex = 0;
             // 
             // cntxtNetwerk
@@ -132,27 +146,121 @@
             // panelInfo
             // 
             this.panelInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelInfo.Controls.Add(this.label1);
+            this.panelInfo.Controls.Add(this.pbIcon);
+            this.panelInfo.Controls.Add(this.gbMalware);
+            this.panelInfo.Controls.Add(this.gbApparaat);
             this.panelInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelInfo.Location = new System.Drawing.Point(0, 0);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(206, 818);
+            this.panelInfo.Size = new System.Drawing.Size(166, 568);
             this.panelInfo.TabIndex = 2;
             // 
-            // label1
+            // pbIcon
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 169);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Computer details:\n\nNetwerk:\n\nIP:\n\nType\n\nFirewall:\n\nVirusscanner:\n\nInfecties:";
+            this.pbIcon.Location = new System.Drawing.Point(3, 3);
+            this.pbIcon.Name = "pbIcon";
+            this.pbIcon.Size = new System.Drawing.Size(128, 128);
+            this.pbIcon.TabIndex = 0;
+            this.pbIcon.TabStop = false;
+            // 
+            // gbMalware
+            // 
+            this.gbMalware.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbMalware.Controls.Add(this.btnAdd);
+            this.gbMalware.Controls.Add(this.btnRemove);
+            this.gbMalware.Controls.Add(this.lbInfecties);
+            this.gbMalware.Location = new System.Drawing.Point(3, 361);
+            this.gbMalware.Name = "gbMalware";
+            this.gbMalware.Size = new System.Drawing.Size(158, 203);
+            this.gbMalware.TabIndex = 10;
+            this.gbMalware.TabStop = false;
+            this.gbMalware.Text = "Malware";
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAdd.Location = new System.Drawing.Point(7, 172);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(70, 23);
+            this.btnAdd.TabIndex = 8;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemove.Location = new System.Drawing.Point(83, 172);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Size = new System.Drawing.Size(68, 23);
+            this.btnRemove.TabIndex = 9;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.UseVisualStyleBackColor = true;
+            // 
+            // lbInfecties
+            // 
+            this.lbInfecties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbInfecties.FormattingEnabled = true;
+            this.lbInfecties.Location = new System.Drawing.Point(7, 19);
+            this.lbInfecties.Name = "lbInfecties";
+            this.lbInfecties.Size = new System.Drawing.Size(144, 147);
+            this.lbInfecties.TabIndex = 6;
+            // 
+            // gbApparaat
+            // 
+            this.gbApparaat.Controls.Add(this.numericUpDown2);
+            this.gbApparaat.Controls.Add(this.numericUpDown1);
+            this.gbApparaat.Controls.Add(this.lblAntivirus);
+            this.gbApparaat.Controls.Add(this.lblFirewall);
+            this.gbApparaat.Location = new System.Drawing.Point(4, 138);
+            this.gbApparaat.Name = "gbApparaat";
+            this.gbApparaat.Size = new System.Drawing.Size(157, 100);
+            this.gbApparaat.TabIndex = 11;
+            this.gbApparaat.TabStop = false;
+            this.gbApparaat.Text = "Apparaat";
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(65, 45);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(40, 20);
+            this.numericUpDown2.TabIndex = 5;
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(65, 19);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(40, 20);
+            this.numericUpDown1.TabIndex = 4;
+            // 
+            // lblAntivirus
+            // 
+            this.lblAntivirus.AutoSize = true;
+            this.lblAntivirus.Location = new System.Drawing.Point(9, 21);
+            this.lblAntivirus.Name = "lblAntivirus";
+            this.lblAntivirus.Size = new System.Drawing.Size(50, 13);
+            this.lblAntivirus.TabIndex = 2;
+            this.lblAntivirus.Text = "Antivirus:";
+            // 
+            // lblFirewall
+            // 
+            this.lblFirewall.AutoSize = true;
+            this.lblFirewall.Location = new System.Drawing.Point(14, 47);
+            this.lblFirewall.Name = "lblFirewall";
+            this.lblFirewall.Size = new System.Drawing.Size(45, 13);
+            this.lblFirewall.TabIndex = 3;
+            this.lblFirewall.Text = "Firewall:";
             // 
             // MPSForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1347, 818);
+            this.ClientSize = new System.Drawing.Size(1076, 568);
             this.Controls.Add(this.splitContainer);
             this.Name = "MPSForm";
             this.Text = "formMain";
@@ -160,14 +268,18 @@
             this.splitContainer.ResumeLayout(false);
             this.cntxtNetwerk.ResumeLayout(false);
             this.panelInfo.ResumeLayout(false);
-            this.panelInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbIcon)).EndInit();
+            this.gbMalware.ResumeLayout(false);
+            this.gbApparaat.ResumeLayout(false);
+            this.gbApparaat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        public System.Windows.Forms.Label label1;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.ContextMenuStrip cntxtNetwerk;
@@ -178,6 +290,16 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
+        private System.Windows.Forms.Label lblFirewall;
+        private System.Windows.Forms.Label lblAntivirus;
+        private System.Windows.Forms.PictureBox pbIcon;
+        private System.Windows.Forms.Button btnRemove;
+        private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.ListBox lbInfecties;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.GroupBox gbMalware;
+        private System.Windows.Forms.GroupBox gbApparaat;
 
     }
 }
