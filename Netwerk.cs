@@ -56,6 +56,9 @@ namespace MPS
                 a1.Parent = a2;
         }
 
+        /// <summary>
+        /// Verbreekt de verbinding met zijn ouder.
+        /// </summary>
         public static void VerbreekVerbinding(Apparaat app)
         {
             if (app.Parent != null)
