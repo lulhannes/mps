@@ -113,9 +113,12 @@ namespace MPS
                 SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.Infecties.Count : 0,
                 SpriteManager.Geselecteerde != null ? SpriteManager.Geselecteerde.ToString() : string.Empty);
 
-            UpdateInput();
-            Netwerk.Update(gameTime);
+            if (IsActive)
+            {
+                UpdateInput();
+            }
 
+            Netwerk.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -202,6 +205,9 @@ namespace MPS
                 Netwerk.Timer -= Netwerk.Timer > 500 ? 100 : 0;
             if (keyStateCurrent.IsKeyDown(Keys.OemOpenBrackets))
                 Netwerk.Timer += Netwerk.Timer < 5000 ? 100 : 0;
+
+            if (keyStateCurrent.IsKeyDown(Keys.Delete))
+                Netwerk.RemoveApparaat(SpriteManager.Geselecteerde);
 
             // Reset
             if (keyStateCurrent.IsKeyDown(Keys.D0))

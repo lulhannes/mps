@@ -32,6 +32,9 @@ namespace MPS
 
         public static void RemoveApparaat(Apparaat app)
         {
+            if (app == null)
+                return;
+
             VerbreekVerbinding(app);
             foreach (var child in app.Children)
             {
@@ -61,7 +64,7 @@ namespace MPS
         /// </summary>
         public static void VerbreekVerbinding(Apparaat app)
         {
-            if (app.Parent != null)
+            if (app != null && app.Parent != null)
             {
                 app.Parent.Children.Remove(app);
             }
@@ -75,8 +78,8 @@ namespace MPS
         /// <returns></returns>
         public static bool KanVerbinden(Apparaat a1, Apparaat a2)
         {
-            return (a2 != null && a1 != null && a2 != a1 && a1 != a2.Root && a2.Parent != a1 && a2 is NetwerkApparaat &&
-                (a2 != a2.Root || a2.Children.Count == 0) && !a2.Parents.Contains(a1));
+            return (a2 != null && a1 != null && a1 != a2 && a2 is NetwerkApparaat &&
+                (a2.Type != ApparaatType.Modem || a2.Children.Count == 0) && !a2.Parents.Contains(a1));
         }
 
         public static void Update(GameTime gameTime)
