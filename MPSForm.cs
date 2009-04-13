@@ -20,6 +20,16 @@ namespace MPS
             muis = new Point();
         }
 
+        public void UpdateList()
+        {
+            lbInfecties.Items.Clear();
+            foreach(Malware m in Netwerk.Malwares)
+            {
+                lbInfecties.Items.Add(m.Naam);
+            }
+
+        }
+
         public Control Panel
         {
             get { return splitContainer.Panel1; }
@@ -73,7 +83,8 @@ namespace MPS
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            (new AddMalwareForm()).ShowDialog();
+            new AddMalwareForm().ShowDialog();
+            UpdateList();
         }
     }
 }
