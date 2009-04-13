@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 
 namespace MPS
 {
@@ -9,6 +10,7 @@ namespace MPS
         [STAThread]
         static void Main()
         {
+            Application.EnableVisualStyles();
             MPSForm form = new MPSForm();
             form.Disposed += form_Disposed;
             using (game = new Game1(form))
@@ -25,4 +27,3 @@ namespace MPS
         }
     }
 }
-
