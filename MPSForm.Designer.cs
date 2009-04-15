@@ -45,8 +45,8 @@
             this.btnRemove = new System.Windows.Forms.Button();
             this.lbInfecties = new System.Windows.Forms.ListBox();
             this.gbApparaat = new System.Windows.Forms.GroupBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.nudFirewall = new System.Windows.Forms.NumericUpDown();
+            this.nudAntivirus = new System.Windows.Forms.NumericUpDown();
             this.lblAntivirus = new System.Windows.Forms.Label();
             this.lblFirewall = new System.Windows.Forms.Label();
             this.splitContainer.Panel2.SuspendLayout();
@@ -56,8 +56,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbIcon)).BeginInit();
             this.gbMalware.SuspendLayout();
             this.gbApparaat.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFirewall)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAntivirus)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer
@@ -213,8 +213,8 @@
             // 
             // gbApparaat
             // 
-            this.gbApparaat.Controls.Add(this.numericUpDown2);
-            this.gbApparaat.Controls.Add(this.numericUpDown1);
+            this.gbApparaat.Controls.Add(this.nudFirewall);
+            this.gbApparaat.Controls.Add(this.nudAntivirus);
             this.gbApparaat.Controls.Add(this.lblAntivirus);
             this.gbApparaat.Controls.Add(this.lblFirewall);
             this.gbApparaat.Location = new System.Drawing.Point(4, 138);
@@ -224,19 +224,21 @@
             this.gbApparaat.TabStop = false;
             this.gbApparaat.Text = "Apparaat";
             // 
-            // numericUpDown2
+            // nudFirewall
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(65, 45);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(40, 20);
-            this.numericUpDown2.TabIndex = 5;
+            this.nudFirewall.Location = new System.Drawing.Point(65, 45);
+            this.nudFirewall.Name = "nudFirewall";
+            this.nudFirewall.Size = new System.Drawing.Size(40, 20);
+            this.nudFirewall.TabIndex = 5;
+            this.nudFirewall.ValueChanged += new System.EventHandler(this.nudFirewall_ValueChanged);
             // 
-            // numericUpDown1
+            // nudAntivirus
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(65, 19);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(40, 20);
-            this.numericUpDown1.TabIndex = 4;
+            this.nudAntivirus.Location = new System.Drawing.Point(65, 19);
+            this.nudAntivirus.Name = "nudAntivirus";
+            this.nudAntivirus.Size = new System.Drawing.Size(40, 20);
+            this.nudAntivirus.TabIndex = 4;
+            this.nudAntivirus.ValueChanged += new System.EventHandler(this.nudAntivirus_ValueChanged);
             // 
             // lblAntivirus
             // 
@@ -272,8 +274,8 @@
             this.gbMalware.ResumeLayout(false);
             this.gbApparaat.ResumeLayout(false);
             this.gbApparaat.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFirewall)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAntivirus)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -296,8 +298,8 @@
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.ListBox lbInfecties;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown nudFirewall;
+        private System.Windows.Forms.NumericUpDown nudAntivirus;
         private System.Windows.Forms.GroupBox gbMalware;
         private System.Windows.Forms.GroupBox gbApparaat;
 

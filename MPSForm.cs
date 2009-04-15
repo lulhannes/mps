@@ -19,6 +19,8 @@ namespace MPS
             MenuOpened = false;
             muis = new Point();
         }
+        
+ 
 
         public void UpdateList()
         {
@@ -29,6 +31,13 @@ namespace MPS
             }
 
         }
+
+        public void UpdateApparaat()
+        {
+            nudAntivirus.Value = SpriteManager.Geselecteerde.Antivirus;
+            nudFirewall.Value = SpriteManager.Geselecteerde.Firewall;
+        }
+      
 
         public Control Panel
         {
@@ -86,5 +95,17 @@ namespace MPS
             new AddMalwareForm().ShowDialog();
             UpdateList();
         }
+
+        private void nudAntivirus_ValueChanged(object sender, EventArgs e)
+        {
+            SpriteManager.Geselecteerde.Antivirus = (int)nudAntivirus.Value;
+        }
+
+        private void nudFirewall_ValueChanged(object sender, EventArgs e)
+        {
+           SpriteManager.Geselecteerde.Firewall = (int)nudFirewall.Value;
+
+        }
+
     }
 }

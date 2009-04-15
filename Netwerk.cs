@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using System.Linq;
+using System;
+
 
 namespace MPS
 {
@@ -10,7 +12,14 @@ namespace MPS
         public static List<Malware> Malwares { get; private set; }
         public static int Timer { get; set; }
 
+
         private static double timePrev;
+
+        public static int RandomNumber(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
+        }
 
         static Netwerk()
         {
@@ -46,7 +55,13 @@ namespace MPS
         public static void AddMalware(string naam, int firewall, int antivirus)
         {
             Malwares.Add(new Malware(naam, firewall, antivirus));
+            int i = RandomNumber(0, Apparatuur.Count() - 1);
+            Malwares[0].Infecteer(Apparatuur[i]);
         }
+
+
+
+
 
         /// <summary>
         /// Verbind twee apparaten indien mogelijk.
@@ -125,8 +140,8 @@ namespace MPS
             Apparatuur[3].Children.Add(Apparatuur[6]);
             Apparatuur[3].Children.Add(Apparatuur[7]);
 
-            AddMalware("Test", 0, 0);
-            Malwares[0].Infecteer(Apparatuur[5]);
-        }
+            
+            }
+
     }
 }
